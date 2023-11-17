@@ -16,7 +16,7 @@ qt_add_qml_module(appWeatherapp_innlevering
     URI Weatherapp_innlevering
     VERSION 1.0
     QML_FILES Main.qml
-    QML_FILES darkModeSwitch.qml
+    QML_FILES
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
