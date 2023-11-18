@@ -3,6 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import "./GetWeatherForUser.js" as Weather
 
 
 
@@ -22,7 +23,21 @@ Window {
     property string darkModeText: "white"
     property string lightModeText: "black"
 
+
+    //Gjør textfargen-if-en til en variabel så jeg slipper å skrive den flere steder
     property string textColor: root.dark_Mode ? root.darkModeText : root.lightModeText
+    //Variabler for å holde brukerinput
+    property string userInput
+    property string apiKey
+
+
+    /*function getText()
+    {
+        userInput = textInput.text
+        apiKey = apiInput.text
+
+        //console.log(userInput)
+    }*/
 
 
 
@@ -54,21 +69,6 @@ Window {
 
 
         }
-
-
-
-        TextInput {
-            id: textInput
-            anchors.top: cityInputLbl.bottom
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-            width: 80
-            height: 20
-            text: qsTr("Skriv by her")
-            font.pixelSize: 14
-        }
-
         Label{
             id: cityInputLbl
             text: "Hvilken by vil du se?"
@@ -78,14 +78,42 @@ Window {
             padding: 5
 
         }
+
+        TextInput {
+            id: textInput
+            anchors.top: cityInputLbl.bottom
+            anchors.left: parent.left
+            color: root.textColor
+            padding: 5
+            width: 200
+            height: 20
+            text: qsTr("Skriv by her")
+            font.pixelSize: 14
+        }
+
+        TextInput {
+            id: apiInput
+            anchors.top: textInput.bottom
+            anchors.left: parent.left
+            color: root.textColor
+            padding: 5
+            width: 200
+            height: 20
+            text: qsTr("skriv inn API-nøkkel her")
+            font.pixelSize: 14
+
+        }
+
+
         Button{
             id:searchCityBtn
             text: "Søk"
-            anchors.top: textInput.bottom
+            anchors.top: apiInput.bottom
             anchors.left: parent.left
             padding: 10
-        }
 
+            onClicked: console.log(Weather.get_current_weather(textInput.text, apiInput.text))
+        }
 
     }
     Grid {
