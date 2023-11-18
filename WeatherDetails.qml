@@ -1,12 +1,30 @@
 import QtQuick 2.0
 
-Rectangle {
-    property int side: 100
-    width: side; height: side
-    color: "red"
+Item{
+    id: weatherItem
+    property string sunicon: "https://cdn-icons-png.flaticon.com/512/5115/5115625.png"
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: console.log("Button clicked!")
+    Column{
+
+        Text{
+            id: temptext
+            text: "her skal temp stå"
+            color: root.textColor
+
+        }
+
+        Text{
+            id: moistText
+            text:"her skal luftfuktighet stå"
+            color: root.textColor
+        }
+
+        Image{
+            id: sunimg
+            source: weatherItem.sunicon
+            width: 150
+            height: 150
+        }
     }
 }
+

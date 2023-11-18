@@ -55,6 +55,8 @@ Window {
 
         }
 
+
+
         TextInput {
             id: textInput
             anchors.top: cityInputLbl.bottom
@@ -97,23 +99,13 @@ Window {
         height: 400
         spacing: 5
 
-        Text{
-            id: tempText
-            text:"testest"
-            color: root.textColor
-
-
-        }
-        Text{
-            id: weatherText
-            text:"testesttest"
-            color: root.textColor
-
-        }
 
         WeatherDetails{
+            id: detail1
 
         }
+
+
 
     }
 
