@@ -19,12 +19,6 @@ Item{
             color: root.textColor
         }
 
-        Image{
-            id: sunimg
-            source: weatherItem.sunicon
-            width: 150
-            height: 150
-        }
     }
 }
 
