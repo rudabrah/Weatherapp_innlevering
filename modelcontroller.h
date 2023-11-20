@@ -11,6 +11,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QJsonArray>
+#include "dayinfo.h"
 
 class ModelController : public QObject
 {
@@ -26,12 +27,16 @@ signals:
 
 private slots:
     void onReplyFinished(QNetworkReply *reply);
+        void handleForcast(QString responsData);
 
 private:
     QNetworkAccessManager *networkManager;
     void ObjectFromString();
-    void handleForcast(QString responsData);
     QJsonObject converStringToJson(QString);
+
+    //Denne er fra dayinfoklassen
+    QList<DayInfo> m_day_info;
+
 };
 
 #endif // MODELCOMPONENT_H

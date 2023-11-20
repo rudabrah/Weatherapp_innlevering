@@ -55,6 +55,9 @@ void ModelController::handleForcast(QString responsData)
     QJsonObject weatherData = convertStringToJson(responsData);//Bruker funksjonen rett over
     if(weatherData.isEmpty()) return ;
 
+    //QMap<QDate, QMap<QTime, WeatherInfo*>> map_date_weather;
+    QMap<QTime, WeatherInfo*> map_date_weather;
+
     for(auto it = weatherData.constBegin(); it != weatherData.constEnd(); it++)
     {
         QString key = it.key();
@@ -62,10 +65,34 @@ void ModelController::handleForcast(QString responsData)
 
         if(key.contains("list"))
         {
+            QDate date;
+            QDateTime dateTime;
+            QJsonObject obj;
             for(auto const &weather: value.toArray())
             {
-                qInfo() << weather;
+
+                //datetime
+                obj = weather.toObject();
+                dateTime = QDateTime::fromString(obj["dt_txt"].toString(),"yyyy-MM-dd HH:mm:ss");
+                date = dateTime.date();
+
+                //Denne bruker den nye konstrukøren
+                DayInfo* day = new DayInfo(date);
+
+                WeatherInfo* new_weather = new WeatherInfo();
+                new_weather->setDescription("snow");
+                new_weather->setTemp_cel(2);
+                new_weather->setUrl("19d");
+
+
+                //map_date_weather[date];
+
+                qInfo() << dateTime.date();
+                qInfo() << dateTime.time();
+
+
             }
+
         }
 
     }
