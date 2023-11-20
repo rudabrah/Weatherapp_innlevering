@@ -1,24 +1,34 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.15
 
 Item{
+
     id: weatherItem
+
     property string sunicon: "https://cdn-icons-png.flaticon.com/512/5115/5115625.png"
 
-    Column{
 
-        Text{
-            id: temptext
-            text: "her skal temp stå"
-            color: root.textColor
+    Rectangle{
+        id: wetrec1
+        width: 300
+        height: 200
+        color: "lightblue"
+        radius: 10
 
+        property string weatherText: ""
+
+        Text {
+            anchors.centerIn: parent
+            text: wetrec1.weatherText
         }
 
-        Text{
-            id: moistText
-            text:"her skal luftfuktighet stå"
-            color: root.textColor
-        }
+        Image{
+            id: mypic1
+            source: weatherItem.sunicon
+            height: 100
+            width: 100
 
+        }
     }
-}
 
+}

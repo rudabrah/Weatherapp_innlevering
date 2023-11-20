@@ -1,10 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include "modelcontroller.h"
 
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+    ModelController obj;
+    obj.requestWeatherData("hei", "pådeg");
+
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/Weatherapp_innlevering/Main.qml"_qs);

@@ -3,14 +3,12 @@ import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
-import "./GetWeatherForUser.js" as Weather
-
 
 
 Window {
     id: root
-    width: 1000
-    height: 1000
+    width: 850
+    height: 850
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
 
@@ -67,6 +65,20 @@ Window {
             checked: false
 
 
+            /*ModelController {
+                id: modelController
+
+                onWeatherDataReceived: {
+                    // Handle the weather data here
+                    weatherDisplay.weatherText = modelController.weatherData;
+                }
+
+                onRequestError: {
+                    // Handle the error here
+                    console.error("Request Error:", error);
+                }
+            }*/
+
 
         }
         Label{
@@ -112,8 +124,8 @@ Window {
             anchors.left: parent.left
             padding: 10
 
-            onClicked: console.log(Weather.get_current_weather(textInput.text, apiInput.text))
         }
+
 
     }
     Grid {
