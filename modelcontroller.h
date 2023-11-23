@@ -27,7 +27,7 @@ signals:
 
 private slots:
     void onReplyFinished(QNetworkReply *reply);
-        void handleForcast(QString responsData);
+    void handleForcast(QString responsData);
 
 private:
     QNetworkAccessManager *networkManager;

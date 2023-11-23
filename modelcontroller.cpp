@@ -12,7 +12,7 @@ ModelController::ModelController(QObject *parent) : QObject(parent)
 void ModelController::requestWeatherData(const QString &cityName, const QString &apiKey)
 {
     // Replace YOUR_API_KEY with your actual OpenWeatherMap API key
-    QString apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q=Oslo&appid=xxxxx";
+    QString apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q=Oslo&appid=xxxx";
 
     QNetworkRequest request;
     request.setUrl(QUrl(apiUrl));
@@ -41,17 +41,21 @@ QJsonObject convertStringToJson(QString stringToConvert)
 
     if (parseError.error == QJsonParseError::NoError)
     {
+        //qInfo() << jsonDocument;
+        //qInfo() << "************************";
         return jsonDocument.object();  // Return an empty object on error
     }
 
     qDebug() << "Error parsing JSON:" << parseError.errorString();
+    //qInfo() << jsonDocument;
+    //qInfo() << "************************";
     return QJsonObject();
 }
 
 
 void ModelController::handleForcast(QString responsData)
 {
-    qInfo() << responsData;
+    //qInfo() << responsData;
     QJsonObject weatherData = convertStringToJson(responsData);//Bruker funksjonen rett over
     if(weatherData.isEmpty()) return ;
 
@@ -80,16 +84,19 @@ void ModelController::handleForcast(QString responsData)
                 DayInfo* day = new DayInfo(date);
 
                 WeatherInfo* new_weather = new WeatherInfo();
-                new_weather->setDescription("snow");
-                new_weather->setTemp_cel(2);
-                new_weather->setUrl("19d");
+                new_weather->setDescription(obj["main"].toString());
+                new_weather->setTemp_cel(obj["temp_kf"].toInt());
+
+                new_weather->setUrl(obj["icon"].toString());
+
 
 
                 //map_date_weather[date];
 
                 qInfo() << dateTime.date();
                 qInfo() << dateTime.time();
-
+                qInfo() << new_weather->description();//Denne printer altså ut snow ettersom det nå er hardkoda inn i loopen
+                qInfo() << new_weather->temp_cel();
 
             }
 

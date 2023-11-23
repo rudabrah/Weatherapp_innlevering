@@ -13,6 +13,12 @@ public:
     explicit DayInfo(QDate date): m_date{date}
     {}//Alternativ konstruktør
 
+    QDate date() const;
+    void setDate(const QDate &newDate);
+
+    QMap<QTime, WeatherInfo *> forecast() const;
+    void setForecast(const QMap<QTime, WeatherInfo *> &newForecast);
+
 signals:
 
 

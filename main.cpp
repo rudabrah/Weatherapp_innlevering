@@ -7,7 +7,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     ModelController obj;
-    obj.requestWeatherData("hei", "pådeg");
+    obj.requestWeatherData("hei", "pådeg");//har bare lagt inn noen random strings siden funksjonen krever det
 
 
     QQmlApplicationEngine engine;
