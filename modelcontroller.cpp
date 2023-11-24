@@ -2,7 +2,12 @@
 
 #include "modelcontroller.h"
 
-ModelController::ModelController(QObject *parent) : QObject(parent)
+
+QString valgtby = "Oslo";
+QString apiNøkkel = "";
+double kelvTodegC = 272.15;
+
+    ModelController::ModelController(QObject *parent) : QObject(parent)
 {
     networkManager = new QNetworkAccessManager(this);
     connect(networkManager, &QNetworkAccessManager::finished, this, &ModelController::onReplyFinished);
@@ -12,7 +17,10 @@ ModelController::ModelController(QObject *parent) : QObject(parent)
 void ModelController::requestWeatherData(const QString &cityName, const QString &apiKey)
 {
     // Replace YOUR_API_KEY with your actual OpenWeatherMap API key
-    QString apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q=Oslo&appid=xxxx";
+    QString apiUrl = "http://api.openweathermap.org/data/2.5/weather?q="
+                     + valgtby
+                     + "&appid="
+                     + apiNøkkel;
 
     QNetworkRequest request;
     request.setUrl(QUrl(apiUrl));
@@ -20,12 +28,45 @@ void ModelController::requestWeatherData(const QString &cityName, const QString 
 
 }
 
+//Function to convert QString to JsonObject. This needs a pass through JsonDocument.
+QJsonObject convertStringToJson(QString stringToConvert)
+{
+    QJsonParseError parseError;
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(stringToConvert.toUtf8(), &parseError);
+    QJsonObject jsonObj = jsonDocument.object();
+
+    if (parseError.error == QJsonParseError::NoError)
+    {
+        //qInfo() << jsonObj;
+        return jsonObj;
+    }
+    qDebug() << "Error parsing JSON:" << parseError.errorString();
+    return QJsonObject();
+}
+//{"base":"stations",
+//"clouds":{"all":100},
+//"cod":200,
+//"coord":{"lat":59.9127,"lon":10.7461},
+//"dt":1700820364,
+//"id":3143244,
+//"main":{"feels_like":269.24,"grnd_level":990,"humidity":66,"pressure":994,"sea_level":994,"temp":273.37,"temp_max":274.14,"temp_min":272.55},
+//"name":"Oslo",
+//"sys":{"country":"NO","id":1624,"sunrise":1700811310,"sunset":1700836341,"type":1},
+//"timezone":3600,
+//"visibility":10000,
+//"weather":[{"description":"overcast clouds","icon":"04d","id":804,"main":"Clouds"}],
+//"wind":{"deg":350,"gust":14.64,"speed":3.85}
+
+//Her gjør vi om det vi får fra APIet til lesbar data
 void ModelController::onReplyFinished(QNetworkReply *reply)
 {
-    QString data;
+    QString data;//Lager variablen
     if (reply->error() == QNetworkReply::NoError) {
-        // Read the data from the reply
+        // Leser all dataen fra replyen
         data = reply->readAll();
+        //Printer ut for å sjekke den
+        //qInfo() << data;
+        //sender den dirrekte til handleForcars for videre behandling
         emit gotData(data);
     } else {
         // Handle error
@@ -33,76 +74,80 @@ void ModelController::onReplyFinished(QNetworkReply *reply)
     }
 }
 
-//Function to convert QString to JsonObject. This needs a pass through JsonDocument.
-QJsonObject convertStringToJson(QString stringToConvert)
-{
-    QJsonParseError parseError;
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(stringToConvert.toUtf8(), &parseError);
 
-    if (parseError.error == QJsonParseError::NoError)
-    {
-        //qInfo() << jsonDocument;
-        //qInfo() << "************************";
-        return jsonDocument.object();  // Return an empty object on error
-    }
-
-    qDebug() << "Error parsing JSON:" << parseError.errorString();
-    //qInfo() << jsonDocument;
-    //qInfo() << "************************";
-    return QJsonObject();
-}
-
-
+//Her tar vi inn "data" emited fra onReplyFinished og gjør den til jsonobjekter
 void ModelController::handleForcast(QString responsData)
 {
-    //qInfo() << responsData;
-    QJsonObject weatherData = convertStringToJson(responsData);//Bruker funksjonen rett over
+    //Tar inn QString data som er emited og sendes inn her som "responsData
+    QJsonObject weatherData = convertStringToJson(responsData);
+    //Sjekke at det faktisk kommer noe
     if(weatherData.isEmpty()) return ;
-
-    //QMap<QDate, QMap<QTime, WeatherInfo*>> map_date_weather;
+    //lager en map som holder klokkeslett og værinfo
     QMap<QTime, WeatherInfo*> map_date_weather;
-
+    //Kjører igjennom hele JsonObjektet som enkelte linjer
     for(auto it = weatherData.constBegin(); it != weatherData.constEnd(); it++)
     {
         QString key = it.key();
         auto value = it.value();
-
+        //Her kjører vi igjennom hvert lag i json og ser etter "list"
         if(key.contains("list"))
         {
             QDate date;
             QDateTime dateTime;
             QJsonObject obj;
+            //Her tar vi hver "list" og legger inn i value for behandling
             for(auto const &weather: value.toArray())
             {
 
                 //datetime
+
                 obj = weather.toObject();
                 dateTime = QDateTime::fromString(obj["dt_txt"].toString(),"yyyy-MM-dd HH:mm:ss");
                 date = dateTime.date();
 
+
+/*
+                qInfo() << temperature;
+                qInfo() << firstWeatherObject;
+                qInfo () << weatherDescription;
+*/
                 //Denne bruker den nye konstrukøren
                 DayInfo* day = new DayInfo(date);
 
-                WeatherInfo* new_weather = new WeatherInfo();
-                new_weather->setDescription(obj["main"].toString());
-                new_weather->setTemp_cel(obj["temp_kf"].toInt());
-
-                new_weather->setUrl(obj["icon"].toString());
 
 
 
-                //map_date_weather[date];
-
-                qInfo() << dateTime.date();
-                qInfo() << dateTime.time();
-                qInfo() << new_weather->description();//Denne printer altså ut snow ettersom det nå er hardkoda inn i loopen
-                qInfo() << new_weather->temp_cel();
+                //qInfo() << dateTime.date();
+                //qInfo() << dateTime.time();
+                //qInfo() << new_weather->description();//Denne printer altså ut snow ettersom det nå er hardkoda inn i loopen
+                //qInfo() << new_weather->temp_cel();
+                //qInfo() << new_weather->url();
 
             }
 
         }
 
     }
+
+    //Prøve noe helt nytt
+    QJsonObject mainObject = weatherData["main"].toObject();
+    double temperature = mainObject["temp"].toDouble() - kelvTodegC;
+    QJsonArray weatherArray = weatherData["weather"].toArray();
+    QJsonObject firstWeatherObject = weatherArray[0].toObject();
+    QString weatherDescription = firstWeatherObject["description"].toString();
+
+    WeatherInfo* new_weather = new WeatherInfo();
+    new_weather->setDescription(weatherDescription);
+    new_weather->setTemp_cel(temperature);
+    new_weather->setUrl("light");
+
+
+    //qInfo() << dateTime.date();
+    //qInfo() << dateTime.time();
+    qInfo() << new_weather->description();//Denne printer altså ut snow ettersom det nå er hardkoda inn i loopen
+    qInfo() << new_weather->temp_cel();
+    //qInfo() << new_weather->url();
+
 }
 
 

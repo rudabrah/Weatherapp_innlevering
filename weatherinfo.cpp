@@ -6,12 +6,12 @@ WeatherInfo::WeatherInfo(QObject *parent)
 
 }
 
-int WeatherInfo::temp_cel() const
+double WeatherInfo::temp_cel() const
 {
     return m_temp_cel;
 }
 
-void WeatherInfo::setTemp_cel(int newTemp_cel)
+void WeatherInfo::setTemp_cel(double newTemp_cel)
 {
     m_temp_cel = newTemp_cel;
 }

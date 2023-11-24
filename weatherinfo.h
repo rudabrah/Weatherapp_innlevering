@@ -11,8 +11,8 @@ public:
     explicit WeatherInfo(QObject *parent = nullptr);
 
 
-    int temp_cel() const;
-    void setTemp_cel(int newTemp_cel);
+    double temp_cel() const;
+    void setTemp_cel(double newTemp_cel);
 
     QString url() const;
     void setUrl(const QString &newUrl);
@@ -23,7 +23,7 @@ public:
 signals:
 
 private:
-    int m_temp_cel;
+    double m_temp_cel;
     QString m_url;
     QString m_description;
 

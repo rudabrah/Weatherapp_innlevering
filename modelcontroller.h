@@ -11,6 +11,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 #include <QJsonArray>
+#include <QJsonValue>
 #include "dayinfo.h"
 
 class ModelController : public QObject
