@@ -35,3 +35,13 @@ void WeatherInfo::setDescription(const QString &newDescription)
 {
     m_description = newDescription;
 }
+
+QString WeatherInfo::iconUrl() const
+{
+    return m_iconUrl;
+}
+
+void WeatherInfo::setIconUrl(const QString &newIconUrl)
+{
+    m_iconUrl = newIconUrl;
+}

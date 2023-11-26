@@ -11,6 +11,9 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
+
+    qmlRegisterType<ModelController>("Model.Controller", 1, 0, "ModelController");
+
     const QUrl url(u"qrc:/Weatherapp_innlevering/Main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); },

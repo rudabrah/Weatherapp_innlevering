@@ -17,7 +17,7 @@ double kelvTodegC = 272.15;
 void ModelController::requestWeatherData(const QString &cityName, const QString &apiKey)
 {
     // Replace YOUR_API_KEY with your actual OpenWeatherMap API key
-    QString apiUrl = "http://api.openweathermap.org/data/2.5/weather?q="
+    QString apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="
                      + valgtby
                      + "&appid="
                      + apiNøkkel;
@@ -37,7 +37,7 @@ QJsonObject convertStringToJson(QString stringToConvert)
 
     if (parseError.error == QJsonParseError::NoError)
     {
-        //qInfo() << jsonObj;
+        qInfo() << jsonObj;
         return jsonObj;
     }
     qDebug() << "Error parsing JSON:" << parseError.errorString();
@@ -105,23 +105,24 @@ void ModelController::handleForcast(QString responsData)
                 dateTime = QDateTime::fromString(obj["dt_txt"].toString(),"yyyy-MM-dd HH:mm:ss");
                 date = dateTime.date();
 
+                QTime time = dateTime.time();
 
-/*
-                qInfo() << temperature;
-                qInfo() << firstWeatherObject;
-                qInfo () << weatherDescription;
-*/
                 //Denne bruker den nye konstrukøren
                 DayInfo* day = new DayInfo(date);
 
+                WeatherInfo* new_weather = new WeatherInfo();
+                new_weather->setDescription("x");
+                new_weather->setTemp_cel(2);
+                new_weather->setUrl("light");
+                new_weather->setIconUrl("x");
 
+                map_date_weather.insert(time, new_weather);
 
+               /* for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
+                    qDebug() << "Key:" << it.key().toString("HH:mm:ss") << ", Value:" << it.value()->getDescription();
+                }
+*/
 
-                //qInfo() << dateTime.date();
-                //qInfo() << dateTime.time();
-                //qInfo() << new_weather->description();//Denne printer altså ut snow ettersom det nå er hardkoda inn i loopen
-                //qInfo() << new_weather->temp_cel();
-                //qInfo() << new_weather->url();
 
             }
 
@@ -129,24 +130,23 @@ void ModelController::handleForcast(QString responsData)
 
     }
 
-    //Prøve noe helt nytt
+  /*  //Prøve noe helt nytt
     QJsonObject mainObject = weatherData["main"].toObject();
     double temperature = mainObject["temp"].toDouble() - kelvTodegC;
     QJsonArray weatherArray = weatherData["weather"].toArray();
     QJsonObject firstWeatherObject = weatherArray[0].toObject();
     QString weatherDescription = firstWeatherObject["description"].toString();
-
-    WeatherInfo* new_weather = new WeatherInfo();
-    new_weather->setDescription(weatherDescription);
-    new_weather->setTemp_cel(temperature);
-    new_weather->setUrl("light");
+    QString weatherIcon = firstWeatherObject["icon"].toString();
 
 
-    //qInfo() << dateTime.date();
-    //qInfo() << dateTime.time();
-    qInfo() << new_weather->description();//Denne printer altså ut snow ettersom det nå er hardkoda inn i loopen
-    qInfo() << new_weather->temp_cel();
-    //qInfo() << new_weather->url();
+
+
+
+
+    qInfo() << new_weather->iconUrl();
+    qInfo() << new_weather->description() << new_weather->temp_cel();
+
+*/
 
 }
 

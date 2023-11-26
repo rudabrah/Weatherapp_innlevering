@@ -20,12 +20,16 @@ public:
     QString description() const;
     void setDescription(const QString &newDescription);
 
+    QString iconUrl() const;
+    void setIconUrl(const QString &newIconUrl);
+
 signals:
 
 private:
     double m_temp_cel;
     QString m_url;
     QString m_description;
+    QString m_iconUrl;
 
 };
 
