@@ -16,6 +16,11 @@ void WeatherInfo::setTemp_cel(double newTemp_cel)
     m_temp_cel = newTemp_cel;
 }
 
+int WeatherInfo::getTemp()
+{
+    return m_temp_cel;
+}
+
 QString WeatherInfo::url() const
 {
     return m_url;
@@ -34,6 +39,11 @@ QString WeatherInfo::description() const
 void WeatherInfo::setDescription(const QString &newDescription)
 {
     m_description = newDescription;
+}
+//Ikke vær helt sikker på denne..
+QString WeatherInfo::getDescription()
+{
+    return m_description;
 }
 
 QString WeatherInfo::iconUrl() const

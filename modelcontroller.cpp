@@ -80,27 +80,32 @@ void ModelController::handleForcast(QString responsData)
 {
     //Tar inn QString data som er emited og sendes inn her som "responsData
     QJsonObject weatherData = convertStringToJson(responsData);
+
     //Sjekke at det faktisk kommer noe
     if(weatherData.isEmpty()) return ;
+
     //lager en map som holder klokkeslett og værinfo
     QMap<QTime, WeatherInfo*> map_date_weather;
+
     //Kjører igjennom hele JsonObjektet som enkelte linjer
-    for(auto it = weatherData.constBegin(); it != weatherData.constEnd(); it++)
+    for(auto it = weatherData.constBegin(); it != weatherData.constEnd(); ++it)
     {
         QString key = it.key();
         auto value = it.value();
+
         //Her kjører vi igjennom hvert lag i json og ser etter "list"
         if(key.contains("list"))
         {
             QDate date;
             QDateTime dateTime;
             QJsonObject obj;
+
             //Her tar vi hver "list" og legger inn i value for behandling
             for(auto const &weather: value.toArray())
             {
 
-                //datetime
 
+                //datetime
                 obj = weather.toObject();
                 dateTime = QDateTime::fromString(obj["dt_txt"].toString(),"yyyy-MM-dd HH:mm:ss");
                 date = dateTime.date();
@@ -110,44 +115,27 @@ void ModelController::handleForcast(QString responsData)
                 //Denne bruker den nye konstrukøren
                 DayInfo* day = new DayInfo(date);
 
+                QJsonObject mainObject = obj["main"].toObject();
+                double temperature = mainObject["temp"].toDouble() - kelvTodegC;
+
+                QJsonArray weatherArray = obj["weather"].toArray();
+                QJsonObject firstWeatherObject = weatherArray[0].toObject();
+                QString weatherDescription = firstWeatherObject["description"].toString();
+
                 WeatherInfo* new_weather = new WeatherInfo();
-                new_weather->setDescription("x");
-                new_weather->setTemp_cel(2);
+                new_weather->setDescription(weatherDescription);
+                new_weather->setTemp_cel(temperature);
                 new_weather->setUrl("light");
                 new_weather->setIconUrl("x");
 
                 map_date_weather.insert(time, new_weather);
 
-               /* for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
+                for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
                     qDebug() << "Key:" << it.key().toString("HH:mm:ss") << ", Value:" << it.value()->getDescription();
                 }
-*/
-
-
             }
-
         }
-
     }
-
-  /*  //Prøve noe helt nytt
-    QJsonObject mainObject = weatherData["main"].toObject();
-    double temperature = mainObject["temp"].toDouble() - kelvTodegC;
-    QJsonArray weatherArray = weatherData["weather"].toArray();
-    QJsonObject firstWeatherObject = weatherArray[0].toObject();
-    QString weatherDescription = firstWeatherObject["description"].toString();
-    QString weatherIcon = firstWeatherObject["icon"].toString();
-
-
-
-
-
-
-    qInfo() << new_weather->iconUrl();
-    qInfo() << new_weather->description() << new_weather->temp_cel();
-
-*/
-
 }
 
 
