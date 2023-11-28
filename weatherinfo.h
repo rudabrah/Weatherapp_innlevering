@@ -11,28 +11,30 @@ public:
     explicit WeatherInfo(QObject *parent = nullptr);
 
 
-    double temp_cel() const;
-    void setTemp_cel(double newTemp_cel);
-    int getTemp();
+    Q_INVOKABLE double temp_cel() const;
+    Q_INVOKABLE void setTemp_cel(double newTemp_cel);
+    Q_INVOKABLE int getTemp();
 
-    QString url() const;
-    void setUrl(const QString &newUrl);
+    Q_INVOKABLE QString url() const;
+    Q_INVOKABLE void setUrl(const QString &newUrl);
 
-    QString description() const;
-    void setDescription(const QString &newDescription);
-    QString getDescription();
+    Q_INVOKABLE QString description() const;
+    Q_INVOKABLE void setDescription(const QString &newDescription);
+    Q_INVOKABLE QString getDescription();
 
-    QString iconUrl() const;
-    void setIconUrl(const QString &newIconUrl);
+    Q_INVOKABLE QString iconUrl() const;
+    Q_INVOKABLE void setIconUrl(const QString &newIconUrl);
+
+    Q_INVOKABLE double m_temp_cel;
+    Q_INVOKABLE QString m_url;
+    Q_INVOKABLE QString m_description;
+    Q_INVOKABLE QString m_iconUrl;
+
 
 
 signals:
 
 private:
-    double m_temp_cel;
-    QString m_url;
-    QString m_description;
-    QString m_iconUrl;
 
 };
 

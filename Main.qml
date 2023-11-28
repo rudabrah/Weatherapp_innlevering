@@ -27,7 +27,8 @@ Window {
     //Variabler for å holde brukerinput
     property string userInput
     property string apiKey
-
+   // property double current_temp : 1
+    property string current_desc:
 
     /*function getText()
     {
@@ -126,6 +127,13 @@ Window {
 
         }
 
+        Label{
+            id: templbl
+            text: root.current_desc
+            anchors.centerIn: parent
+            color: root.textColor
+        }
+
 
     }
     Grid {
@@ -138,12 +146,6 @@ Window {
         width: 400
         height: 400
         spacing: 5
-
-
-        WeatherDetails{
-            id: detail1
-
-        }
 
 
 

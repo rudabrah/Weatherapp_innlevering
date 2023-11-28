@@ -43,19 +43,7 @@ QJsonObject convertStringToJson(QString stringToConvert)
     qDebug() << "Error parsing JSON:" << parseError.errorString();
     return QJsonObject();
 }
-//{"base":"stations",
-//"clouds":{"all":100},
-//"cod":200,
-//"coord":{"lat":59.9127,"lon":10.7461},
-//"dt":1700820364,
-//"id":3143244,
-//"main":{"feels_like":269.24,"grnd_level":990,"humidity":66,"pressure":994,"sea_level":994,"temp":273.37,"temp_max":274.14,"temp_min":272.55},
-//"name":"Oslo",
-//"sys":{"country":"NO","id":1624,"sunrise":1700811310,"sunset":1700836341,"type":1},
-//"timezone":3600,
-//"visibility":10000,
-//"weather":[{"description":"overcast clouds","icon":"04d","id":804,"main":"Clouds"}],
-//"wind":{"deg":350,"gust":14.64,"speed":3.85}
+
 
 //Her gjør vi om det vi får fra APIet til lesbar data
 void ModelController::onReplyFinished(QNetworkReply *reply)
@@ -121,17 +109,18 @@ void ModelController::handleForcast(QString responsData)
                 QJsonArray weatherArray = obj["weather"].toArray();
                 QJsonObject firstWeatherObject = weatherArray[0].toObject();
                 QString weatherDescription = firstWeatherObject["description"].toString();
+                QString weatherIconLink = firstWeatherObject["icon"].toString();
 
                 WeatherInfo* new_weather = new WeatherInfo();
                 new_weather->setDescription(weatherDescription);
                 new_weather->setTemp_cel(temperature);
-                new_weather->setUrl("light");
-                new_weather->setIconUrl("x");
+                //new_weather->setUrl("light");
+                new_weather->setIconUrl(weatherIconLink);
 
                 map_date_weather.insert(time, new_weather);
 
                 for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
-                    qDebug() << "Key:" << it.key().toString("HH:mm:ss") << ", Value:" << it.value()->getDescription();
+                    qDebug() << "Key:" << it.key().toString("HH:mm:ss") << ", Value:" << it.value()->getDescription() << "&" << it.value()->getTemp() <<"°C" ;
                 }
             }
         }
