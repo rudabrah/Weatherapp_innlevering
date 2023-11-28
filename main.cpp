@@ -5,6 +5,7 @@
 #include "modelcontroller.h"
 #include "dayinfo.h"
 #include "weatherinfo.h"
+#include "currentweather.h"
 
 
 int main(int argc, char *argv[])

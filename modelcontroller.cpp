@@ -4,7 +4,7 @@
 
 
 QString valgtby = "Oslo";
-QString apiNøkkel = "";
+QString apiNøkkel = "41749e5f7ad7e73cce5057a63ed97919";
 double kelvTodegC = 272.15;
 
     ModelController::ModelController(QObject *parent) : QObject(parent)

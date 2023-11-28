@@ -28,7 +28,7 @@ Window {
     property string userInput
     property string apiKey
    // property double current_temp : 1
-    property string current_desc:
+    //property string current_desc:
 
     /*function getText()
     {
@@ -129,7 +129,7 @@ Window {
 
         Label{
             id: templbl
-            text: root.current_desc
+            //text: root.current_desc
             anchors.centerIn: parent
             color: root.textColor
         }

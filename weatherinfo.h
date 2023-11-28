@@ -1,6 +1,7 @@
 #ifndef WEATHERINFO_H
 #define WEATHERINFO_H
 
+
 #include <QObject>
 
 
