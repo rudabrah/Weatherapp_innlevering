@@ -32,12 +32,12 @@ void currentWeather::handleReply(QNetworkReply *reply)
         // Leser all dataen fra replyen
         response = reply->readAll();
         //Printer ut for å sjekke den
-        //qInfo() << data;
+        qInfo() << response;
         //sender den dirrekte til handleForcars for videre behandling
         emit currentResponse(response);
     } else {
         // Handle error
-        emit requestError(reply->errorString());
+        emit reqError(reply->errorString());
     }
 
 }

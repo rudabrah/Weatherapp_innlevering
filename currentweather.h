@@ -21,12 +21,16 @@ public:
     void getCurrentWeather(const QString &currentCity, const QString &apiKey);
 
 signals:
+    void reqError(const QString &error);
+    void currentResponse(QString);
 
 private slots:
     void handleReply(QNetworkReply *reply);
 
 private:
     QNetworkAccessManager *myNetworkManager;
+    void requestError(QString);
+
 };
 
 #endif // CURRENTWEATHER_H
