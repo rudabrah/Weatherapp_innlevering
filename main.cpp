@@ -12,7 +12,9 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     ModelController obj;
+    currentWeather wtrh;
     obj.requestWeatherData("hei", "pådeg");//har bare lagt inn noen random strings siden funksjonen krever det
+    wtrh.getCurrentWeather("Oslo", "41749e5f7ad7e73cce5057a63ed97919");
 
 
     QQmlApplicationEngine engine;

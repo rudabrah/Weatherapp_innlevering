@@ -37,7 +37,7 @@ QJsonObject convertStringToJson(QString stringToConvert)
 
     if (parseError.error == QJsonParseError::NoError)
     {
-        qInfo() << jsonObj;
+        //qInfo() << jsonObj;
         return jsonObj;
     }
     qDebug() << "Error parsing JSON:" << parseError.errorString();

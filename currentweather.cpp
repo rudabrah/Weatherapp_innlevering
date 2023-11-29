@@ -1,11 +1,13 @@
 #include "currentweather.h"
 
 
+
 currentWeather::currentWeather(QObject *parent)
     : QObject{parent}
 {
     myNetworkManager = new QNetworkAccessManager(this);
     connect(myNetworkManager, &QNetworkAccessManager::finished, this, &currentWeather::handleReply);
+    connect(this, &currentWeather::currentResponse, this, &currentWeather::handleWeather);
 
 }
 
@@ -14,7 +16,7 @@ currentWeather::currentWeather(QObject *parent)
 void currentWeather::getCurrentWeather(const QString &currentCity, const QString &apiKey)
 {
     //prepare the requesturl
-    QString weatherRequestUrl ="http://api.openweathermap.org/data/2.5/forecast?q="
+    QString weatherRequestUrl ="http://api.openweathermap.org/data/2.5/weather?q="
                                 + currentCity
                                 + "&appid="
                                 + apiKey;
@@ -25,6 +27,23 @@ void currentWeather::getCurrentWeather(const QString &currentCity, const QString
     myNetworkManager->get(currentRequest);
 }
 
+QJsonObject currentWeather::makeStringToJson(QString myString)
+{
+    QJsonParseError parseError;
+    QJsonDocument jsonDocument = QJsonDocument::fromJson(myString.toUtf8(), &parseError);
+    QJsonObject jsonWObj = jsonDocument.object();
+
+    if (parseError.error == QJsonParseError::NoError)
+    {
+        qInfo() << jsonWObj;
+        return jsonWObj;
+    }
+    qDebug() << "Error parsing JSON:" << parseError.errorString();
+    return QJsonObject();
+}
+
+
+
 void currentWeather::handleReply(QNetworkReply *reply)
 {
     QString response;//Lager variablen
@@ -32,7 +51,7 @@ void currentWeather::handleReply(QNetworkReply *reply)
         // Leser all dataen fra replyen
         response = reply->readAll();
         //Printer ut for å sjekke den
-        qInfo() << response;
+        //qInfo() << response;
         //sender den dirrekte til handleForcars for videre behandling
         emit currentResponse(response);
     } else {
@@ -41,4 +60,13 @@ void currentWeather::handleReply(QNetworkReply *reply)
     }
 
 }
+
+void currentWeather::handleWeather(QString replyResponse)
+{
+    QJsonObject weatherJson = makeStringToJson(replyResponse);
+    qInfo() << weatherJson;
+
+}
+
+
 
