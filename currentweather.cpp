@@ -8,7 +8,7 @@ currentWeather::currentWeather(QObject *parent)
     myNetworkManager = new QNetworkAccessManager(this);
     connect(myNetworkManager, &QNetworkAccessManager::finished, this, &currentWeather::handleReply);
     connect(this, &currentWeather::currentResponse, this, &currentWeather::handleWeather);
-    connect(this, &currentWeather::weatherJson, this, &currentWeather::parseWeatherResponse);
+
 
 }
 
@@ -65,7 +65,21 @@ void currentWeather::handleReply(QNetworkReply *reply)
 void currentWeather::handleWeather(QString replyResponse)
 {
     QJsonObject weatherJson = makeStringToJson(replyResponse);
-    qInfo() << weatherJson;
+
+    if (weatherJson.isEmpty()) return;
+
+    //Get the temp
+    double kelvToC = 272.15;
+    QJsonObject currentWeatherMainObject = weatherJson["main"].toObject();
+    double curTemp = currentWeatherMainObject["temp"].toDouble()-kelvToC;
+    qInfo() << "Current temp is" << curTemp << "°C";
+
+    //Description
+    QJsonArray currentWeatherdescToArray = weatherJson["weather"].toArray();
+    QJsonObject currentWeatherDescriptionObject = currentWeatherdescToArray[0].toObject();
+    QString currentWeatherDescription = currentWeatherDescriptionObject["description"].toString();
+    QString currentWeatherIcon = currentWeatherDescriptionObject["icon"].toString();
+    qInfo() << "Description" << currentWeatherDescription << "icon" << currentWeatherIcon;
 
 }
 

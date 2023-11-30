@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("weatherInfo", &weatherInfo);
 
 
+
     const QUrl url(u"qrc:/Weatherapp_innlevering/Main.qml"_qs);
 
 
