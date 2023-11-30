@@ -22,6 +22,7 @@ public:
 
 
 
+
 signals:
     void reqError(const QString &error);
     void currentResponse(QString);
@@ -35,6 +36,10 @@ private:
     QNetworkAccessManager *myNetworkManager;
     void requestError(QString);
     QJsonObject makeStringToJson(QString myString);
+
+    QString currentCity;
+    double currentTemperature;
+    QString weatherDescription;
 
 };
 

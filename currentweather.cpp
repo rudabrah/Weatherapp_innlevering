@@ -8,6 +8,7 @@ currentWeather::currentWeather(QObject *parent)
     myNetworkManager = new QNetworkAccessManager(this);
     connect(myNetworkManager, &QNetworkAccessManager::finished, this, &currentWeather::handleReply);
     connect(this, &currentWeather::currentResponse, this, &currentWeather::handleWeather);
+    connect(this, &currentWeather::weatherJson, this, &currentWeather::parseWeatherResponse);
 
 }
 
@@ -67,6 +68,5 @@ void currentWeather::handleWeather(QString replyResponse)
     qInfo() << weatherJson;
 
 }
-
 
 
