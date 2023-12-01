@@ -19,7 +19,7 @@ class currentWeather : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(double curTemp READ getCurTemp NOTIFY curTempChanged)
+    Q_PROPERTY(float curTemp READ getCurTemp NOTIFY curTempChanged)
     Q_PROPERTY(QString currentWeatherDescription READ getCurrentWeatherDescription NOTIFY currentWeatherDescriptionChanged)
 
 
@@ -28,7 +28,7 @@ public:
 
     Q_INVOKABLE void getCurrentWeather(const QString &currentCity, const QString &apiKey);
 
-    double getCurTemp() const
+    float getCurTemp() const
     {
         return roundToDecimalPlaces(curTemp, 2);
     }
@@ -39,11 +39,6 @@ public:
 
     Q_INVOKABLE QString currentCity;
     Q_INVOKABLE QString weatherDescription;
-
-
-
-
-
 
 signals:
     void reqError(const QString &error);
@@ -63,13 +58,13 @@ private:
     void requestError(QString);
     QJsonObject makeStringToJson(QString myString);
 
-    double curTemp;
+    Q_INVOKABLE float curTemp;
     QString currentWeatherDescription;
-    QMap<QString, double> temp_and_desc_map;
-    double roundToDecimalPlaces(double value, int decimalPlaces) const
+    QMap<QString, float> temp_and_desc_map;
+    float roundToDecimalPlaces(float value, int decimalPlaces) const
     {
-        const double multiplier = std::pow(10.0, decimalPlaces);
-        double roundedValue = std::round(value * multiplier) / multiplier;
+        const float multiplier = std::pow(10.0, decimalPlaces);
+        float roundedValue = std::round(value * multiplier) / multiplier;
 
         // Ensure that the rounded value is within the representable range for a double
         if (std::isfinite(roundedValue))

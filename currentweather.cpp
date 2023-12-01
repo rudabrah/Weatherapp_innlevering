@@ -70,7 +70,7 @@ void currentWeather::handleWeather(QString replyResponse)
     if (weatherJson.isEmpty()) return;
 
     //Get the temp
-    double kelvToC = 272.15;
+    float kelvToC = 272.15;
     QJsonObject currentWeatherMainObject = weatherJson["main"].toObject();
     curTemp = currentWeatherMainObject["temp"].toDouble() - kelvToC;
     qInfo() << "Current temp is" << curTemp << "°C";
@@ -86,7 +86,7 @@ void currentWeather::handleWeather(QString replyResponse)
     emit curTempChanged();
     emit currentWeatherDescriptionChanged();
 
-    QMap<QString, double> temp_and_desc_map;
+    QMap<QString, float> temp_and_desc_map;
 
 
 
