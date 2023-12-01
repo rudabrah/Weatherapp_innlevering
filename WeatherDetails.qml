@@ -9,6 +9,7 @@ Item{
     property string sunicon: "https://cdn-icons-png.flaticon.com/512/5115/5115625.png"
 
 
+
     Rectangle{
         id: wetrec1
         width: 300
@@ -23,13 +24,15 @@ Item{
             text: wetrec1.weatherText
         }
 
-        Image{
+        /*Image{
             id: mypic1
             source: weatherItem.sunicon
             height: 100
             width: 100
 
-        }
+        }*/
+
+
     }
 
 }

@@ -8,6 +8,8 @@
 class WeatherInfo : public QObject
 {
     Q_OBJECT
+
+
 public:
     explicit WeatherInfo(QObject *parent = nullptr);
 

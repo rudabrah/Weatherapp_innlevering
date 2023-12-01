@@ -1,5 +1,6 @@
-#include "currentweather.h"
+//currentweather.cpp
 
+#include "currentweather.h"
 
 
 currentWeather::currentWeather(QObject *parent)
@@ -71,7 +72,7 @@ void currentWeather::handleWeather(QString replyResponse)
     //Get the temp
     double kelvToC = 272.15;
     QJsonObject currentWeatherMainObject = weatherJson["main"].toObject();
-    double curTemp = currentWeatherMainObject["temp"].toDouble()-kelvToC;
+    curTemp = currentWeatherMainObject["temp"].toDouble() - kelvToC;
     qInfo() << "Current temp is" << curTemp << "°C";
 
     //Description
@@ -81,6 +82,17 @@ void currentWeather::handleWeather(QString replyResponse)
     QString currentWeatherIcon = currentWeatherDescriptionObject["icon"].toString();
     qInfo() << "Description" << currentWeatherDescription << "icon" << currentWeatherIcon;
 
+    // Emit signals to notify QML about the changes
+    emit curTempChanged();
+    emit currentWeatherDescriptionChanged();
+
+    QMap<QString, double> temp_and_desc_map;
+
+
+
 }
+
+
+
 
 

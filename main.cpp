@@ -1,3 +1,5 @@
+//main.cpp
+
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -13,7 +15,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     ModelController obj;
     currentWeather wtrh;
-    obj.requestWeatherData("hei", "pådeg");//har bare lagt inn noen random strings siden funksjonen krever det
+    //obj.requestWeatherData("hei", "pådeg");//har bare lagt inn noen random strings siden funksjonen krever det
     wtrh.getCurrentWeather("Oslo", "41749e5f7ad7e73cce5057a63ed97919");
 
 
@@ -21,13 +23,15 @@ int main(int argc, char *argv[])
 
     //qmlRegisterType<ModelController>("Model.Controller", 1, 0, "ModelController");
 
-    ModelController MyModel;
-    DayInfo dayInfo;
-    WeatherInfo weatherInfo;
+    ModelController myModel;
+    DayInfo myDayInfo;
+    WeatherInfo myWeatherInfo;
+    currentWeather myWeather;
 
-    engine.rootContext()->setContextProperty("myModel", &MyModel);
-    engine.rootContext()->setContextProperty("dayInfo", &dayInfo);
-    engine.rootContext()->setContextProperty("weatherInfo", &weatherInfo);
+    engine.rootContext()->setContextProperty("myModel", &myModel);
+    engine.rootContext()->setContextProperty("myDayInfo", &myDayInfo);
+    engine.rootContext()->setContextProperty("myWeatherInfo", &myWeatherInfo);
+    engine.rootContext()->setContextProperty("myWeather", &myWeather);
 
 
 

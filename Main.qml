@@ -1,3 +1,5 @@
+//Main.qml
+
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -11,6 +13,8 @@ Window {
     height: 850
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
+
+
 
     property bool dark_Mode: dark_Mode_Switch.checked
 
@@ -27,8 +31,9 @@ Window {
     //Variabler for å holde brukerinput
     property string userInput
     property string apiKey
-   // property double current_temp : 1
-    //property string current_desc:
+    property double currentTemp: - 5.0
+    property string currentDesc: ""
+
 
     /*function getText()
     {
@@ -56,6 +61,7 @@ Window {
 
             anchors.right: parent.right
             anchors.top: parent.top
+
 
             Text {
                 text: qsTr("Dark Mode")
@@ -124,12 +130,20 @@ Window {
             anchors.top: apiInput.bottom
             anchors.left: parent.left
             padding: 10
+            onClicked: {
+                myWeather.getCurrentWeather(textInput.text, apiInput.text);
+                console.log("Current Temperature in Button Clicked:", myWeather.curTemp);
+                console.log("Current Weather Description in Button Clicked:", myWeather.currentWeatherDescription);
+            }
+
+
+
 
         }
 
         Label{
             id: templbl
-            //text: root.current_desc
+            text: "Her skal det stå ting"
             anchors.centerIn: parent
             color: root.textColor
         }
@@ -147,6 +161,17 @@ Window {
         height: 400
         spacing: 5
 
+        Label{
+            id: templbl1
+            text: root.currentTemp
+
+
+        }
+
+        Text {
+            text: "Current Temperature: " + (myWeather ? Number(myWeather.curTemp).toLocaleString(Qt.locale(), 'f', 2) + "°C" : "N/A")
+            anchors.centerIn: parent
+        }
 
 
     }
