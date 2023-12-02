@@ -1,3 +1,5 @@
+//dayinfo.cpp
+
 #include "dayinfo.h"
 
 DayInfo::DayInfo(QObject *parent)

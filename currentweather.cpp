@@ -3,6 +3,7 @@
 #include "currentweather.h"
 
 
+
 currentWeather::currentWeather(QObject *parent)
     : QObject{parent}
 {
@@ -69,6 +70,8 @@ void currentWeather::handleWeather(QString replyResponse)
 
     if (weatherJson.isEmpty()) return;
 
+
+
     //Get the temp
     float kelvToC = 272.15;
     QJsonObject currentWeatherMainObject = weatherJson["main"].toObject();
@@ -82,11 +85,16 @@ void currentWeather::handleWeather(QString replyResponse)
     QString currentWeatherIcon = currentWeatherDescriptionObject["icon"].toString();
     qInfo() << "Description" << currentWeatherDescription << "icon" << currentWeatherIcon;
 
+
+
+
     // Emit signals to notify QML about the changes
     emit curTempChanged();
     emit currentWeatherDescriptionChanged();
 
-    QMap<QString, float> temp_and_desc_map;
+    //QMap<QString, float> temp_and_desc_map;
+
+    qInfo() << currentWeatherDescription;
 
 
 

@@ -14,18 +14,12 @@ Window {
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
 
-
-
     property bool dark_Mode: dark_Mode_Switch.checked
-
     //fargevalg for darkmode og ikke
     property string dark_mode_on: "#1A1A1A"
     property string dark_mode_off: "#D1E5E8"
-
     property string darkModeText: "white"
     property string lightModeText: "black"
-
-
     //Gjør textfargen-if-en til en variabel så jeg slipper å skrive den flere steder
     property string textColor: root.dark_Mode ? root.darkModeText : root.lightModeText
     //Variabler for å holde brukerinput
@@ -34,17 +28,18 @@ Window {
     property double currentTemp: - 5.0
     property string currentDesc: ""
 
+    Connections {
+        target: myWeather
+        onCurTempChanged: {
+            // Update UI or perform other actions when curTemp changes
+            console.log("curTemp changed:", myWeather.curTemp);
+        }
 
-    /*function getText()
-    {
-        userInput = textInput.text
-        apiKey = apiInput.text
-
-        //console.log(userInput)
-    }*/
-
-
-
+        onCurrentWeatherDescriptionChanged: {
+            // Update UI or perform other actions when currentWeatherDescription changes
+            console.log("currentWeatherDescription changed:", myWeather.currentWeatherDescription);
+        }
+    }
 
     //Rectangle to house all the goodgood
     Rectangle {
@@ -70,21 +65,6 @@ Window {
                 anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
             }
             checked: false
-
-
-            /*ModelController {
-                id: modelController
-
-                onWeatherDataReceived: {
-                    // Handle the weather data here
-                    weatherDisplay.weatherText = modelController.weatherData;
-                }
-
-                onRequestError: {
-                    // Handle the error here
-                    console.error("Request Error:", error);
-                }
-            }*/
 
 
         }
@@ -130,26 +110,22 @@ Window {
             anchors.top: apiInput.bottom
             anchors.left: parent.left
             padding: 10
-            onClicked: {
-                myWeather.getCurrentWeather(textInput.text, apiInput.text);
-                console.log("Current Temperature in Button Clicked:", myWeather.curTemp);
-                console.log("Current Weather Description in Button Clicked:", myWeather.currentWeatherDescription);
-            }
 
-
-
-
-        }
-
-        Label{
-            id: templbl
-            text: "Her skal det stå ting"
-            anchors.centerIn: parent
-            color: root.textColor
         }
 
 
     }
+
+    Label{
+        id: templbl
+        text: "Her skal det stå ting"
+        anchors.centerIn: parent
+        color: root.textColor
+    }
+
+
+
+
     Grid {
         id: grid
         x: 300
@@ -169,7 +145,7 @@ Window {
         }
 
         Text {
-            text: "Current Temperature: " + (myWeather ? Number(myWeather.curTemp).toLocaleString(Qt.locale(), 'f', 2) + "°C" : "N/A")
+            text: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
             anchors.centerIn: parent
         }
 

@@ -1,3 +1,5 @@
+//weatherinfo.h
+
 #ifndef WEATHERINFO_H
 #define WEATHERINFO_H
 
