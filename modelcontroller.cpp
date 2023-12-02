@@ -3,11 +3,10 @@
 #include "modelcontroller.h"
 
 
-QString valgtby = "Oslo";
-QString apiNøkkel = "";
+
 double kelvTodegC = 272.15;
 
-    ModelController::ModelController(QObject *parent) : QObject(parent)
+ModelController::ModelController(QObject *parent) : QObject(parent)
 {
     networkManager = new QNetworkAccessManager(this);
     connect(networkManager, &QNetworkAccessManager::finished, this, &ModelController::onReplyFinished);
@@ -18,9 +17,9 @@ void ModelController::requestWeatherData(const QString &cityName, const QString 
 {
     // Replace YOUR_API_KEY with your actual OpenWeatherMap API key
     QString apiUrl = "http://api.openweathermap.org/data/2.5/forecast?q="
-                     + valgtby
+                     + cityName
                      + "&appid="
-                     + apiNøkkel;
+                     + apiKey;
 
     QNetworkRequest request;
     request.setUrl(QUrl(apiUrl));
@@ -37,7 +36,7 @@ QJsonObject convertStringToJson(QString stringToConvert)
 
     if (parseError.error == QJsonParseError::NoError)
     {
-        qInfo() << jsonObj;
+        //qInfo() << jsonObj;
         return jsonObj;
     }
     qDebug() << "Error parsing JSON:" << parseError.errorString();

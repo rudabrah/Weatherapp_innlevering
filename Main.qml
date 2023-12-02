@@ -1,3 +1,5 @@
+//Main.qml
+
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -13,32 +15,38 @@ Window {
     title: qsTr("Freyr")//Nordic god of sunshine
 
     property bool dark_Mode: dark_Mode_Switch.checked
-
     //fargevalg for darkmode og ikke
     property string dark_mode_on: "#1A1A1A"
     property string dark_mode_off: "#D1E5E8"
-
     property string darkModeText: "white"
     property string lightModeText: "black"
-
-
     //Gjør textfargen-if-en til en variabel så jeg slipper å skrive den flere steder
     property string textColor: root.dark_Mode ? root.darkModeText : root.lightModeText
     //Variabler for å holde brukerinput
     property string userInput
     property string apiKey
-   // property double current_temp : 1
-    property string current_desc:
 
-    /*function getText()
-    {
-        userInput = textInput.text
-        apiKey = apiInput.text
+    property string currentTemp: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
+    property double currentfloattemp: myWeather.curTemp
 
-        //console.log(userInput)
-    }*/
+    Connections {
+        target: myWeather
+        onDataReady: {
+            // Access myWeather.curTemp safely here
+            console.log("Current Temperature in QML:", myWeather.curTemp);
+        }
+    }
 
-
+    //Keeping the data updated
+    Timer {
+        interval: 30000
+        running: true
+        repeat: true
+        onTriggered: {
+            // Trigger a function to update weather data
+            myWeather.getCurrentWeather(root.userInput, root.apiKey);
+        }
+    }
 
 
     //Rectangle to house all the goodgood
@@ -57,6 +65,7 @@ Window {
             anchors.right: parent.right
             anchors.top: parent.top
 
+
             Text {
                 text: qsTr("Dark Mode")
                 color: root.textColor
@@ -64,21 +73,6 @@ Window {
                 anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
             }
             checked: false
-
-
-            /*ModelController {
-                id: modelController
-
-                onWeatherDataReceived: {
-                    // Handle the weather data here
-                    weatherDisplay.weatherText = modelController.weatherData;
-                }
-
-                onRequestError: {
-                    // Handle the error here
-                    console.error("Request Error:", error);
-                }
-            }*/
 
 
         }
@@ -124,18 +118,30 @@ Window {
             anchors.top: apiInput.bottom
             anchors.left: parent.left
             padding: 10
+            onClicked: {
+                // Trigger a function to update weather data
+                root.userInput = textInput.text
+                root.apiKey = apiInput.text
+                myWeather.getCurrentWeather(root.userInput, root.apiInput);
+                myModel.requestWeatherData(root.userInput, root.apiInput);
 
-        }
+            }
 
-        Label{
-            id: templbl
-            text: root.current_desc
-            anchors.centerIn: parent
-            color: root.textColor
         }
 
 
     }
+
+    Label{
+        id: templbl
+        text: root.currentTemp
+        anchors.centerIn: parent
+        color: root.textColor
+    }
+
+
+
+
     Grid {
         id: grid
         x: 300
@@ -146,6 +152,13 @@ Window {
         width: 400
         height: 400
         spacing: 5
+
+        Label{
+            id: templbl1
+            text: root.currentTemp
+
+
+        }
 
 
 

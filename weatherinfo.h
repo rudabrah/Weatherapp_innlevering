@@ -1,5 +1,8 @@
+//weatherinfo.h
+
 #ifndef WEATHERINFO_H
 #define WEATHERINFO_H
+
 
 #include <QObject>
 
@@ -7,6 +10,8 @@
 class WeatherInfo : public QObject
 {
     Q_OBJECT
+
+
 public:
     explicit WeatherInfo(QObject *parent = nullptr);
 
