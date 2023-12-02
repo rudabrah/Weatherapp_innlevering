@@ -23,6 +23,7 @@ class currentWeather : public QObject
     Q_PROPERTY(QString currentWeatherDescription READ getCurrentWeatherDescription NOTIFY currentWeatherDescriptionChanged)
 
 
+
 public:
     explicit currentWeather(QObject *parent = nullptr);
 
@@ -40,11 +41,15 @@ public:
     Q_INVOKABLE QString currentCity;
     Q_INVOKABLE QString weatherDescription;
 
+    // Declaration of the isValid() method
+    bool isValid() const;
+
 signals:
     void reqError(const QString &error);
     void currentResponse(QString);
     void curTempChanged();
     void currentWeatherDescriptionChanged();
+    void dataReady();
 
 public slots:
     void handleWeather(QString replyResponse);
@@ -58,7 +63,7 @@ private:
     void requestError(QString);
     QJsonObject makeStringToJson(QString myString);
 
-    Q_INVOKABLE float curTemp;
+    Q_INVOKABLE float curTemp = 0.0;
     QString currentWeatherDescription;
     QMap<QString, float> temp_and_desc_map;
     float roundToDecimalPlaces(float value, int decimalPlaces) const
@@ -72,6 +77,9 @@ private:
         else
             return value; // Return the original value if rounding causes overflow or underflow
     }
+
+    bool valid;
+
 
 
 };

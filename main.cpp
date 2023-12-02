@@ -16,18 +16,13 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    ModelController obj;
-    currentWeather wtrh;
-    //obj.requestWeatherData("hei", "pådeg");//har bare lagt inn noen random strings siden funksjonen krever det
-    wtrh.getCurrentWeather("Oslo", "41749e5f7ad7e73cce5057a63ed97919");
 
-
-    //qmlRegisterType<ModelController>("Model.Controller", 1, 0, "ModelController");
 
     ModelController myModel;
     DayInfo myDayInfo;
     WeatherInfo myWeatherInfo;
     currentWeather myWeather;
+    qDebug() << "Is myWeather object valid?" << (myWeather.isValid() ? "Yes" : "No");
 
     engine.rootContext()->setContextProperty("myModel", &myModel);
     engine.rootContext()->setContextProperty("myDayInfo", &myDayInfo);

@@ -5,12 +5,13 @@
 
 
 currentWeather::currentWeather(QObject *parent)
-    : QObject{parent}
+    : QObject{parent}, valid{false}
 {
     myNetworkManager = new QNetworkAccessManager(this);
     connect(myNetworkManager, &QNetworkAccessManager::finished, this, &currentWeather::handleReply);
     connect(this, &currentWeather::currentResponse, this, &currentWeather::handleWeather);
 
+    valid = true;
 
 }
 
@@ -28,6 +29,11 @@ void currentWeather::getCurrentWeather(const QString &currentCity, const QString
     QNetworkRequest currentRequest;
     currentRequest.setUrl(QUrl(weatherRequestUrl));
     myNetworkManager->get(currentRequest);
+}
+
+bool currentWeather::isValid() const
+{
+    return valid;
 }
 
 QJsonObject currentWeather::makeStringToJson(QString myString)
@@ -78,6 +84,14 @@ void currentWeather::handleWeather(QString replyResponse)
     curTemp = currentWeatherMainObject["temp"].toDouble() - kelvToC;
     qInfo() << "Current temp is" << curTemp << "°C";
 
+    // Calculate rounded temperature
+    double roundedTemp = roundToDecimalPlaces(curTemp, 2);
+
+    // Assign the rounded value to curTemp
+    curTemp = roundedTemp;
+
+    qInfo() << "Current temp is" << curTemp << "°C";
+
     //Description
     QJsonArray currentWeatherdescToArray = weatherJson["weather"].toArray();
     QJsonObject currentWeatherDescriptionObject = currentWeatherdescToArray[0].toObject();
@@ -89,8 +103,12 @@ void currentWeather::handleWeather(QString replyResponse)
 
 
     // Emit signals to notify QML about the changes
+
+
+    // Emit signals to notify QML about the changes
     emit curTempChanged();
     emit currentWeatherDescriptionChanged();
+    emit dataReady(); // Add this signal
 
     //QMap<QString, float> temp_and_desc_map;
 

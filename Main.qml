@@ -25,21 +25,29 @@ Window {
     //Variabler for å holde brukerinput
     property string userInput
     property string apiKey
-    property double currentTemp: - 5.0
-    property string currentDesc: ""
+
+    property string currentTemp: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
+    property double currentfloattemp: myWeather.curTemp
 
     Connections {
         target: myWeather
-        onCurTempChanged: {
-            // Update UI or perform other actions when curTemp changes
-            console.log("curTemp changed:", myWeather.curTemp);
-        }
-
-        onCurrentWeatherDescriptionChanged: {
-            // Update UI or perform other actions when currentWeatherDescription changes
-            console.log("currentWeatherDescription changed:", myWeather.currentWeatherDescription);
+        onDataReady: {
+            // Access myWeather.curTemp safely here
+            console.log("Current Temperature in QML:", myWeather.curTemp);
         }
     }
+
+    //Keeping the data updated
+    Timer {
+        interval: 30000
+        running: true
+        repeat: true
+        onTriggered: {
+            // Trigger a function to update weather data
+            myWeather.getCurrentWeather(root.userInput, root.apiKey);
+        }
+    }
+
 
     //Rectangle to house all the goodgood
     Rectangle {
@@ -110,6 +118,14 @@ Window {
             anchors.top: apiInput.bottom
             anchors.left: parent.left
             padding: 10
+            onClicked: {
+                // Trigger a function to update weather data
+                root.userInput = textInput.text
+                root.apiKey = apiInput.text
+                myWeather.getCurrentWeather(root.userInput, root.apiInput);
+                myModel.requestWeatherData(root.userInput, root.apiInput);
+
+            }
 
         }
 
@@ -118,7 +134,7 @@ Window {
 
     Label{
         id: templbl
-        text: "Her skal det stå ting"
+        text: root.currentTemp
         anchors.centerIn: parent
         color: root.textColor
     }
@@ -144,10 +160,6 @@ Window {
 
         }
 
-        Text {
-            text: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
-            anchors.centerIn: parent
-        }
 
 
     }
