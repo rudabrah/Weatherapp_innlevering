@@ -19,7 +19,7 @@ class ModelController : public QObject
     Q_OBJECT
 public:
     explicit ModelController(QObject *parent = nullptr);
-    void requestWeatherData(const QString &cityName, const QString &apiKey);
+    Q_INVOKABLE void requestWeatherData(const QString &cityName, const QString &apiKey);
 
 signals:
     void requestError(const QString &error);

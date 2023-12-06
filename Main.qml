@@ -1,5 +1,4 @@
 //Main.qml
-
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -8,55 +7,79 @@ import QtQuick.Layouts
 
 
 Window {
+
     id: root
     width: 850
     height: 850
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
-
+//********************************************************************************
+    //Handeling colors
     property bool dark_Mode: dark_Mode_Switch.checked
     //fargevalg for darkmode og ikke
     property string dark_mode_on: "#1A1A1A"
     property string dark_mode_off: "#D1E5E8"
     property string darkModeText: "white"
     property string lightModeText: "black"
+
     //Gjør textfargen-if-en til en variabel så jeg slipper å skrive den flere steder
     property string textColor: root.dark_Mode ? root.darkModeText : root.lightModeText
+//********************************************************************************
     //Variabler for å holde brukerinput
-    property string userInput
-    property string apiKey
+    property string userCityInput: ""
+    property string userApiKey: ""
 
-    property string currentTemp: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
-    property double currentfloattemp: myWeather.curTemp
+    //Må bruke double da float ikke finnes.
+    property double currentTemperature: 0.0
+
+
+    function getNewWeather( string1, string2)
+    {
+        console.log(string1, string2)
+        //Update the stored values
+        root.userCityInput = string1
+        root.userApiKey = string2
+
+        myWeather.getCurrentWeather(string1, string2)
+
+    }
+
 
     Connections {
         target: myWeather
         onDataReady: {
             // Access myWeather.curTemp safely here
             console.log("Current Temperature in QML:", myWeather.curTemp);
+
+            getNewWeather("Oslo", "xxxx");
+
+            WeatherDetails.updateWeatherIcon();
+
+
         }
     }
 
-    //Keeping the data updated
+  /*  //Keeping the data updated
     Timer {
         interval: 30000
         running: true
         repeat: true
         onTriggered: {
             // Trigger a function to update weather data
-            myWeather.getCurrentWeather(root.userInput, root.apiKey);
+            myWeather.getCurrentWeather("Oslo", "");
         }
-    }
+    }*/
 
 
     //Rectangle to house all the goodgood
     Rectangle {
         id: mainbkg
         anchors.fill: parent
-        anchors.rightMargin: 0
-        anchors.bottomMargin: 0
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
+        anchors.centerIn: parent
+        anchors.rightMargin: 2
+        anchors.bottomMargin: 2
+        anchors.leftMargin: 2
+        anchors.topMargin: 2
         color: root.dark_Mode ? root.dark_mode_on : root.dark_mode_off
 
         Switch {
@@ -76,93 +99,22 @@ Window {
 
 
         }
-        Label{
-            id: cityInputLbl
-            text: "Hvilken by vil du se?"
-            anchors.top: parent.top
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-
-        }
-
-        TextInput {
-            id: textInput
-            anchors.top: cityInputLbl.bottom
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-            width: 200
-            height: 20
-            text: qsTr("Skriv by her")
-            font.pixelSize: 14
-        }
-
-        TextInput {
-            id: apiInput
-            anchors.top: textInput.bottom
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-            width: 200
-            height: 20
-            text: qsTr("skriv inn API-nøkkel her")
-            font.pixelSize: 14
+        WeatherDetails{
+            anchors.centerIn: parent
 
         }
 
 
-        Button{
-            id:searchCityBtn
-            text: "Søk"
-            anchors.top: apiInput.bottom
-            anchors.left: parent.left
-            padding: 10
-            onClicked: {
-                // Trigger a function to update weather data
-                root.userInput = textInput.text
-                root.apiKey = apiInput.text
-                myWeather.getCurrentWeather(root.userInput, root.apiInput);
-                myModel.requestWeatherData(root.userInput, root.apiInput);
 
-            }
 
-        }
 
 
     }
 
-    Label{
-        id: templbl
-        text: root.currentTemp
-        anchors.centerIn: parent
-        color: root.textColor
-    }
-
-
-
-
-    Grid {
-        id: grid
-        x: 300
-        y: 300
-
-        columns: 2
-        rows: 2
-        width: 400
-        height: 400
-        spacing: 5
-
-        Label{
-            id: templbl1
-            text: root.currentTemp
-
-
-        }
-
-
-
-    }
 
 }
+
+
+
+
 

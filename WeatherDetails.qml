@@ -6,9 +6,27 @@ Item{
 
     id: weatherItem
 
-    property string sunicon: "https://cdn-icons-png.flaticon.com/512/5115/5115625.png"
+    property string currentWeatherDetail: myWeather.currentWeatherDescription
+    property string currentWeatherTemp: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
+    property string currentWeatherIcon: myWeather.currentWeatherIcon
+    property string iconlink: "https://openweathermap.org/img/wn/" + currentWeatherIcon + "@2x.png"
+    property string loadupIconLink: "https://openweathermap.org/img/wn/01d@2x.png"
+
+    function updateWeatherIcon()
+    {
+        weatherIcon.source = iconLink
+    }
 
 
+    Timer {
+        interval: 30000
+        running: true
+        repeat: true
+        onTriggered: {
+            // Trigger a function to update weather data
+            myWeather.getCurrentWeather("Oslo", "xxx");
+        }
+    }
 
     Rectangle{
         id: wetrec1
@@ -17,20 +35,24 @@ Item{
         color: "lightblue"
         radius: 10
 
-        property string weatherText: ""
+        Grid{
 
-        Label {
-            anchors.centerIn: parent
-            text: wetrec1.weatherText
+            Label {
+                anchors.centerIn: parent
+                text: weatherItem.currentWeatherIcon
+                color: root.textColor
+            }
+
+
+            Image{
+                id: weatherIcon
+                source: weatherItem.loadupIconLink
+                height: 100
+                width: 100
+
+            }
+
         }
-
-        /*Image{
-            id: mypic1
-            source: weatherItem.sunicon
-            height: 100
-            width: 100
-
-        }*/
 
 
     }

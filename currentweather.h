@@ -38,8 +38,11 @@ public:
         return currentWeatherDescription;
     }
 
+    //Making variables that will be used in QML public.
     Q_INVOKABLE QString currentCity;
     Q_INVOKABLE QString weatherDescription;
+    Q_INVOKABLE QString currentWeatherIcon;
+    Q_INVOKABLE float curTemp = 0.0;
 
     // Declaration of the isValid() method
     bool isValid() const;
@@ -63,7 +66,7 @@ private:
     void requestError(QString);
     QJsonObject makeStringToJson(QString myString);
 
-    Q_INVOKABLE float curTemp = 0.0;
+
     QString currentWeatherDescription;
     QMap<QString, float> temp_and_desc_map;
     float roundToDecimalPlaces(float value, int decimalPlaces) const
