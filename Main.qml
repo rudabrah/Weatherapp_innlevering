@@ -13,18 +13,22 @@ Window {
     height: 850
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
-//********************************************************************************
+    //********************************************************************************
     //Handeling colors
     property bool dark_Mode: dark_Mode_Switch.checked
     //fargevalg for darkmode og ikke
-    property string dark_mode_on: "#1A1A1A"
-    property string dark_mode_off: "#D1E5E8"
+    property string dark_mode_on_top: "#1A1A2B"
+    property string dark_mode_off_top: "#D1E5E8"
+    property string dark_mode_on_right: "steelblue"
+    property string dark_mode_off_right: "lightsteelblue"
+    property string dark_mode_on_left: "darkslategrey"
+    property string dark_mode_off_left: "lightslategrey"
     property string darkModeText: "white"
     property string lightModeText: "black"
 
     //Gjør textfargen-if-en til en variabel så jeg slipper å skrive den flere steder
     property string textColor: root.dark_Mode ? root.darkModeText : root.lightModeText
-//********************************************************************************
+    //********************************************************************************
     //Variabler for å holde brukerinput
     property string userCityInput: ""
     property string userApiKey: ""
@@ -53,13 +57,10 @@ Window {
 
             getNewWeather("Oslo", "xxxx");
 
-            WeatherDetails.updateWeatherIcon();
-
-
         }
     }
 
-  /*  //Keeping the data updated
+    /*  //Keeping the data updated
     Timer {
         interval: 30000
         running: true
@@ -80,37 +81,84 @@ Window {
         anchors.bottomMargin: 2
         anchors.leftMargin: 2
         anchors.topMargin: 2
-        color: root.dark_Mode ? root.dark_mode_on : root.dark_mode_off
+        color: root.dark_Mode ? root.dark_mode_on_top : root.dark_mode_off_top
 
-        Switch {
-            id: dark_Mode_Switch
+        Column{
+            id:topColumn
+            spacing: 2
 
-            anchors.right: parent.right
-            anchors.top: parent.top
+            Rectangle{
+                id: topColRec;
+                color: root.dark_Mode ? root.dark_mode_on_top : root.dark_mode_off_top
+                height: root.height / 7
+                width: root.width
+                radius: 10
 
+                Switch {
+                    id: dark_Mode_Switch
 
-            Text {
-                text: qsTr("Dark Mode")
-                color: root.textColor
-                anchors.top: dark_Mode_Switch.bottom
-                anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+
+                    Text {
+                        text: qsTr("Dark Mode")
+                        color: root.textColor
+                        anchors.top: dark_Mode_Switch.bottom
+                        anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
+                    }
+                    checked: false
+
+                }
+
             }
-            checked: false
+            Rectangle{
+                id: topColBottomRec
+                height: (root.height / 7) * 6
+                width: root.width
 
+                Row{
+                    id: rootRows1;
+                    spacing: 2;
+                    width: topColBottomRec.width / 2
+                    height: topColBottomRec.height
+                    anchors.left: topColBottomRec.left
+
+                    Rectangle{
+                        color: root.dark_Mode ? root.dark_mode_on_right : root.dark_mode_off_right
+                        width: rootRows1.width
+                        height: rootRows1.height
+                        radius: 10
+
+                        WeatherDetails{
+
+                        }
+                    }
+                }
+
+                Row{
+                    id: rootRows2
+                    spacing: 2
+                    width: topColBottomRec.width / 2
+                    height: topColBottomRec.height
+                    anchors.left: rootRows1.right
+
+                    Rectangle{
+                        color: root.dark_Mode ? root.dark_mode_on_left : root.dark_mode_off_left
+                        width: rootRows2.width
+                        height: rootRows2.height
+                        radius: 10
+
+                        WeatherDetails{
+
+                        }
+                    }
+                }
+
+            }
 
         }
-        WeatherDetails{
-            anchors.centerIn: parent
-
-        }
-
-
-
-
-
 
     }
-
 
 }
 
