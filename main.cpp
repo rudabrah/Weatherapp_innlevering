@@ -16,8 +16,6 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-
-
     ModelController myModel;
     DayInfo myDayInfo;
     WeatherInfo myWeatherInfo;
@@ -28,6 +26,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("myDayInfo", &myDayInfo);
     engine.rootContext()->setContextProperty("myWeatherInfo", &myWeatherInfo);
     engine.rootContext()->setContextProperty("myWeather", &myWeather);
+
+    //myWeather.getCurrentWeather("Oslo", "");
+    //myModel.requestWeatherData("Oslo", "");
+
 
 
     const QUrl url(u"qrc:/Weatherapp_innlevering/Main.qml"_qs);

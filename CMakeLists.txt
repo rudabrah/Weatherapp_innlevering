@@ -25,6 +25,7 @@ qt_add_qml_module(appWeatherapp_innlevering
     SOURCES weatherinfo.h weatherinfo.cpp
     SOURCES dayinfo.h dayinfo.cpp
     SOURCES currentweather.h currentweather.cpp
+    QML_FILES WeatherSearch.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

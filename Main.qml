@@ -1,5 +1,4 @@
 //Main.qml
-
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
@@ -8,161 +7,161 @@ import QtQuick.Layouts
 
 
 Window {
+
     id: root
     width: 850
     height: 850
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
-
+    //********************************************************************************
+    //Handeling colors
     property bool dark_Mode: dark_Mode_Switch.checked
     //fargevalg for darkmode og ikke
-    property string dark_mode_on: "#1A1A1A"
-    property string dark_mode_off: "#D1E5E8"
+    property string dark_mode_on_top: "#1A1A2B"
+    property string dark_mode_off_top: "#D1E5E8"
+    property string dark_mode_on_right: "steelblue"
+    property string dark_mode_off_right: "lightsteelblue"
+    property string dark_mode_on_left: "darkslategrey"
+    property string dark_mode_off_left: "lightslategrey"
     property string darkModeText: "white"
     property string lightModeText: "black"
+
     //Gjør textfargen-if-en til en variabel så jeg slipper å skrive den flere steder
     property string textColor: root.dark_Mode ? root.darkModeText : root.lightModeText
+    //********************************************************************************
     //Variabler for å holde brukerinput
-    property string userInput
-    property string apiKey
+    property string userCityInput: ""
+    property string userApiKey: ""
 
-    property string currentTemp: "Current Temperature: " + myWeather.curTemp.toFixed(2) + "°C"
-    property double currentfloattemp: myWeather.curTemp
+    //Må bruke double da float ikke finnes.
+    property double currentTemperature: 0.0
+    property string currentTemperatureString: currentTemperature.toString()
+    property string iconLinkCurrent: ""
+    property string currentDesc:""
+
+
+
+
+
 
     Connections {
         target: myWeather
         onDataReady: {
             // Access myWeather.curTemp safely here
-            console.log("Current Temperature in QML:", myWeather.curTemp);
+            console.log("Current Temperature in QML:", myWeather.curTemp, "Linje 47 i Main.qml", currentTemperature);
+
+            currentTemperature = myWeather.curTemp;
+            currentTemperatureString = myWeather.curTemp.toString();
+            iconLinkCurrent = myWeather.currentWeatherIcon;
+            currentDesc = myWeather.currentWeatherDescription;
+
+            console.log(currentTemperature, "er nå tempvariablen", iconLinkCurrent);
+            weatherDetailCurrent.updateWeatherStatus();
+
         }
     }
 
-    //Keeping the data updated
-    Timer {
-        interval: 30000
-        running: true
-        repeat: true
-        onTriggered: {
-            // Trigger a function to update weather data
-            myWeather.getCurrentWeather(root.userInput, root.apiKey);
-        }
-    }
+
 
 
     //Rectangle to house all the goodgood
     Rectangle {
         id: mainbkg
         anchors.fill: parent
-        anchors.rightMargin: 0
-        anchors.bottomMargin: 0
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
-        color: root.dark_Mode ? root.dark_mode_on : root.dark_mode_off
-
-        Switch {
-            id: dark_Mode_Switch
-
-            anchors.right: parent.right
-            anchors.top: parent.top
-
-
-            Text {
-                text: qsTr("Dark Mode")
-                color: root.textColor
-                anchors.top: dark_Mode_Switch.bottom
-                anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
-            }
-            checked: false
-
-
-        }
-        Label{
-            id: cityInputLbl
-            text: "Hvilken by vil du se?"
-            anchors.top: parent.top
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-
-        }
-
-        TextInput {
-            id: textInput
-            anchors.top: cityInputLbl.bottom
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-            width: 200
-            height: 20
-            text: qsTr("Skriv by her")
-            font.pixelSize: 14
-        }
-
-        TextInput {
-            id: apiInput
-            anchors.top: textInput.bottom
-            anchors.left: parent.left
-            color: root.textColor
-            padding: 5
-            width: 200
-            height: 20
-            text: qsTr("skriv inn API-nøkkel her")
-            font.pixelSize: 14
-
-        }
-
-
-        Button{
-            id:searchCityBtn
-            text: "Søk"
-            anchors.top: apiInput.bottom
-            anchors.left: parent.left
-            padding: 10
-            onClicked: {
-                // Trigger a function to update weather data
-                root.userInput = textInput.text
-                root.apiKey = apiInput.text
-                myWeather.getCurrentWeather(root.userInput, root.apiInput);
-                myModel.requestWeatherData(root.userInput, root.apiInput);
-
-            }
-
-        }
-
-
-    }
-
-    Label{
-        id: templbl
-        text: root.currentTemp
         anchors.centerIn: parent
-        color: root.textColor
-    }
+        anchors.rightMargin: 2
+        anchors.bottomMargin: 2
+        anchors.leftMargin: 2
+        anchors.topMargin: 2
+        color: root.dark_Mode ? root.dark_mode_on_top : root.dark_mode_off_top
+
+        Column{
+            id:topColumn
+            spacing: 2
+
+            Rectangle{
+                id: topColRec;
+                color: root.dark_Mode ? root.dark_mode_on_top : root.dark_mode_off_top
+                height: root.height / 7
+                width: root.width
+                radius: 10
+
+                WeatherSearch{
 
 
+                }
 
+                Switch {
+                    id: dark_Mode_Switch
 
-    Grid {
-        id: grid
-        x: 300
-        y: 300
+                    anchors.right: parent.right
+                    anchors.top: parent.top
 
-        columns: 2
-        rows: 2
-        width: 400
-        height: 400
-        spacing: 5
+                    Text {
+                        text: qsTr("Dark Mode")
+                        color: root.textColor
+                        anchors.top: dark_Mode_Switch.bottom
+                        anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
+                    }
+                    checked: false
 
-        Label{
-            id: templbl1
-            text: root.currentTemp
+                }
 
+            }
+            Rectangle{
+                id: topColBottomRec
+                height: (root.height / 7) * 6
+                width: root.width
+
+                Row{
+                    id: rootRows1;
+                    spacing: 2;
+                    width: topColBottomRec.width / 2
+                    height: topColBottomRec.height
+                    anchors.left: topColBottomRec.left
+
+                    Rectangle{
+                        color: root.dark_Mode ? root.dark_mode_on_right : root.dark_mode_off_right
+                        width: rootRows1.width
+                        height: rootRows1.height
+                        radius: 10
+
+                        WeatherDetails{
+                            id: weatherDetailCurrent
+
+                        }
+                    }
+                }
+
+                Row{
+                    id: rootRows2
+                    spacing: 2
+                    width: topColBottomRec.width / 2
+                    height: topColBottomRec.height
+                    anchors.left: rootRows1.right
+
+                    Rectangle{
+                        color: root.dark_Mode ? root.dark_mode_on_left : root.dark_mode_off_left
+                        width: rootRows2.width
+                        height: rootRows2.height
+                        radius: 10
+
+                        WeatherDetails{
+                            id: weatherDetailForcast
+
+                        }
+                    }
+                }
+
+            }
 
         }
-
-
 
     }
 
 }
+
+
+
+
 

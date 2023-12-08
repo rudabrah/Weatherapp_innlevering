@@ -19,6 +19,7 @@ currentWeather::currentWeather(QObject *parent)
 //Function to
 void currentWeather::getCurrentWeather(const QString &currentCity, const QString &apiKey)
 {
+    qInfo() << "Started getting weather" << currentCity << apiKey;
     //prepare the requesturl
     QString weatherRequestUrl ="http://api.openweathermap.org/data/2.5/weather?q="
                                 + currentCity
@@ -30,7 +31,7 @@ void currentWeather::getCurrentWeather(const QString &currentCity, const QString
     currentRequest.setUrl(QUrl(weatherRequestUrl));
     myNetworkManager->get(currentRequest);
 }
-
+//this is just to check that everything is wokring
 bool currentWeather::isValid() const
 {
     return valid;
@@ -76,10 +77,10 @@ void currentWeather::handleWeather(QString replyResponse)
 
     if (weatherJson.isEmpty()) return;
 
-
-
     //Get the temp
+    //the response is in kelvin, this is to give correct celcius.
     float kelvToC = 272.15;
+
     QJsonObject currentWeatherMainObject = weatherJson["main"].toObject();
     curTemp = currentWeatherMainObject["temp"].toDouble() - kelvToC;
     qInfo() << "Current temp is" << curTemp << "°C";
@@ -90,29 +91,25 @@ void currentWeather::handleWeather(QString replyResponse)
     // Assign the rounded value to curTemp
     curTemp = roundedTemp;
 
-    qInfo() << "Current temp is" << curTemp << "°C";
+    qInfo() << "From c++, Current temp is" << curTemp << "°C";
 
     //Description
     QJsonArray currentWeatherdescToArray = weatherJson["weather"].toArray();
     QJsonObject currentWeatherDescriptionObject = currentWeatherdescToArray[0].toObject();
-    QString currentWeatherDescription = currentWeatherDescriptionObject["description"].toString();
-    QString currentWeatherIcon = currentWeatherDescriptionObject["icon"].toString();
+    currentWeatherDescription = currentWeatherDescriptionObject["description"].toString();
+    currentWeatherIcon = currentWeatherDescriptionObject["icon"].toString();
     qInfo() << "Description" << currentWeatherDescription << "icon" << currentWeatherIcon;
-
-
-
-
-    // Emit signals to notify QML about the changes
-
 
     // Emit signals to notify QML about the changes
     emit curTempChanged();
     emit currentWeatherDescriptionChanged();
-    emit dataReady(); // Add this signal
+    emit currentWeatherIconChanged();
+    //this is to check that everything is working. Debugging..
+    emit dataReady();
 
     //QMap<QString, float> temp_and_desc_map;
 
-    qInfo() << currentWeatherDescription;
+    qInfo() << currentWeatherDescription << "*******************************";
 
 
 
