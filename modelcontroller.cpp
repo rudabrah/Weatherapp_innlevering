@@ -118,9 +118,9 @@ void ModelController::handleForcast(QString responsData)
 
                 map_date_weather.insert(time, new_weather);
 
-               /* for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
+                for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
                     qDebug() << "Key:" << it.key().toString("HH:mm:ss") << ", Value:" << it.value()->getDescription() << "&" << it.value()->getTemp() <<"°C" ;
-                }*/
+                }
             }
         }
     }

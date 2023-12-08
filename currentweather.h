@@ -21,6 +21,7 @@ class currentWeather : public QObject
 
     Q_PROPERTY(float curTemp READ getCurTemp NOTIFY curTempChanged)
     Q_PROPERTY(QString currentWeatherDescription READ getCurrentWeatherDescription NOTIFY currentWeatherDescriptionChanged)
+    Q_PROPERTY(QString currentWeatherIcon READ getCurrentWeatherIcon NOTIFY currentWeatherIconChanged)
 
 
 
@@ -36,6 +37,10 @@ public:
     QString getCurrentWeatherDescription() const
     {
         return currentWeatherDescription;
+    }
+    QString getCurrentWeatherIcon() const
+    {
+        return currentWeatherIcon;
     }
 
     //Making variables that will be used in QML public.
@@ -53,6 +58,7 @@ signals:
     void curTempChanged();
     void currentWeatherDescriptionChanged();
     void dataReady();
+    void currentWeatherIconChanged();
 
 public slots:
     void handleWeather(QString replyResponse);

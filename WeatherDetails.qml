@@ -1,14 +1,24 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
+import QtQuick.Window
+import QtQuick.Controls
+import QtQuick.Controls.Material
+import QtQuick.Layouts
 
 
 Item{
 
     property string baseIconLink: "https://openweathermap.org/img/wn/01d@2x.png"
+    property string fullCurrentIconLink: "https://openweathermap.org/img/wn/" + root.iconLinkCurrent + "@2x.png"
+    property double currentTempDet: root.currentTemperature.toFixed(2)
+    property string currentWeathDescDet: root.currentDesc
 
-    function updateWeatherIcon()
+
+    function updateWeatherStatus()
     {
-        weatherIcon.source = iconLink
+        weatherIcon.source = fullCurrentIconLink
+        actualDescLbl.text = currentWeathDescDet
+        actualTempLbl.text = currentTempDet
     }
 
 
@@ -76,7 +86,7 @@ Item{
                 id: actualDescLbl
                 padding: 10
                 //width: parent /3
-                text:"xx"
+                text: ""
                 color: root.textColor
                 font.pixelSize: 16
             }
@@ -85,7 +95,7 @@ Item{
                 id: actualTempLbl
                 padding: 10
                 //width: parent /3
-                text:"0.0"
+                text: ""
                 color: root.textColor
                 font.pixelSize: 16
             }

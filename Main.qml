@@ -35,41 +35,33 @@ Window {
 
     //Må bruke double da float ikke finnes.
     property double currentTemperature: 0.0
+    property string currentTemperatureString: currentTemperature.toString()
+    property string iconLinkCurrent: ""
+    property string currentDesc:""
 
 
-    function getNewWeather( string1, string2)
-    {
-        console.log(string1, string2)
-        //Update the stored values
-        root.userCityInput = string1
-        root.userApiKey = string2
 
-        myWeather.getCurrentWeather(string1, string2)
 
-    }
 
 
     Connections {
         target: myWeather
         onDataReady: {
             // Access myWeather.curTemp safely here
-            console.log("Current Temperature in QML:", myWeather.curTemp);
+            console.log("Current Temperature in QML:", myWeather.curTemp, "Linje 47 i Main.qml", currentTemperature);
 
-            getNewWeather("Oslo", "xxxx");
+            currentTemperature = myWeather.curTemp;
+            currentTemperatureString = myWeather.curTemp.toString();
+            iconLinkCurrent = myWeather.currentWeatherIcon;
+            currentDesc = myWeather.currentWeatherDescription;
+
+            console.log(currentTemperature, "er nå tempvariablen", iconLinkCurrent);
+            weatherDetailCurrent.updateWeatherStatus();
 
         }
     }
 
-    /*  //Keeping the data updated
-    Timer {
-        interval: 30000
-        running: true
-        repeat: true
-        onTriggered: {
-            // Trigger a function to update weather data
-            myWeather.getCurrentWeather("Oslo", "");
-        }
-    }*/
+
 
 
     //Rectangle to house all the goodgood
@@ -93,6 +85,11 @@ Window {
                 height: root.height / 7
                 width: root.width
                 radius: 10
+
+                WeatherSearch{
+
+
+                }
 
                 Switch {
                     id: dark_Mode_Switch
@@ -130,6 +127,7 @@ Window {
                         radius: 10
 
                         WeatherDetails{
+                            id: weatherDetailCurrent
 
                         }
                     }
@@ -149,6 +147,7 @@ Window {
                         radius: 10
 
                         WeatherDetails{
+                            id: weatherDetailForcast
 
                         }
                     }

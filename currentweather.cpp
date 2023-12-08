@@ -19,6 +19,7 @@ currentWeather::currentWeather(QObject *parent)
 //Function to
 void currentWeather::getCurrentWeather(const QString &currentCity, const QString &apiKey)
 {
+    qInfo() << "Started getting weather" << currentCity << apiKey;
     //prepare the requesturl
     QString weatherRequestUrl ="http://api.openweathermap.org/data/2.5/weather?q="
                                 + currentCity
@@ -95,13 +96,14 @@ void currentWeather::handleWeather(QString replyResponse)
     //Description
     QJsonArray currentWeatherdescToArray = weatherJson["weather"].toArray();
     QJsonObject currentWeatherDescriptionObject = currentWeatherdescToArray[0].toObject();
-    QString currentWeatherDescription = currentWeatherDescriptionObject["description"].toString();
+    currentWeatherDescription = currentWeatherDescriptionObject["description"].toString();
     currentWeatherIcon = currentWeatherDescriptionObject["icon"].toString();
     qInfo() << "Description" << currentWeatherDescription << "icon" << currentWeatherIcon;
 
     // Emit signals to notify QML about the changes
     emit curTempChanged();
     emit currentWeatherDescriptionChanged();
+    emit currentWeatherIconChanged();
     //this is to check that everything is working. Debugging..
     emit dataReady();
 
