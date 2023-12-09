@@ -27,6 +27,8 @@ void ModelController::requestWeatherData(const QString &cityName, const QString 
 
 }
 
+
+
 //Function to convert QString to JsonObject. This needs a pass through JsonDocument.
 QJsonObject convertStringToJson(QString stringToConvert)
 {
@@ -62,7 +64,6 @@ void ModelController::onReplyFinished(QNetworkReply *reply)
 }
 
 
-//Her tar vi inn "data" emited fra onReplyFinished og gjør den til jsonobjekter
 void ModelController::handleForcast(QString responsData)
 {
     //Tar inn QString data som er emited og sendes inn her som "responsData
@@ -71,8 +72,8 @@ void ModelController::handleForcast(QString responsData)
     //Sjekke at det faktisk kommer noe
     if(weatherData.isEmpty()) return ;
 
-    //lager en map som holder klokkeslett og værinfo
-    QMap<QTime, WeatherInfo*> map_date_weather;
+    //lager en map som holder dato, klokkeslett og værinfo
+    QMap<QDateTime, WeatherInfo*> map_date_weather;
 
     //Kjører igjennom hele JsonObjektet som enkelte linjer
     for(auto it = weatherData.constBegin(); it != weatherData.constEnd(); ++it)
@@ -116,20 +117,58 @@ void ModelController::handleForcast(QString responsData)
                 //new_weather->setUrl("light");
                 new_weather->setIconUrl(weatherIconLink);
 
-                map_date_weather.insert(time, new_weather);
+                map_date_weather.insert(dateTime, new_weather);
 
-                for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
-                    qDebug() << "Key:" << it.key().toString("HH:mm:ss") << ", Value:" << it.value()->getDescription() << "&" << it.value()->getTemp() <<"°C" ;
-                }
+                convertToVariantMap(map_date_weather);
+
+                //This is to give the QML a heads up to start
+                emit modelReady();
+
+                /*for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
+                    qDebug() << "Key:" << it.key().toString("yyyy-MM-dd HH:mm:ss") << ", Value:" << it.value()->getDescription() << "&" << it.value()->getTemp() <<"°C" ;
+                }*/
             }
         }
     }
 }
 
 
+//For å gjøre forcasten tilgjengelig for QML må QMap gjøres om til QVaraintMap
+//Kjører en memberfunction ettersom den kun skal brukes som en del av modelcontroller
+QVariantMap ModelController::convertToVariantMap(QMap<QDateTime, WeatherInfo*> map){
+    QVariantMap variantMap;
+
+    for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
+        // Gjør om QDateTime til String så den blir lesbar
+        QString key = it.key().toString();
+
+        // Gjør om til string her og av samme grunn som over
+        QString value;
+        if (it.value() != nullptr) {
+            value = QString("Weather: %1, Temperature: %2")
+                        .arg(it.value()->description())
+                        .arg(it.value()->temp_cel());
+        } else {
+            value = "No data available";
+        }
+
+        // Putter det inn i variantmappen
+        variantMap.insert(key, value);
+        for (auto it = variantMap.constBegin(); it != variantMap.constEnd(); ++it) {
+            qDebug() << it.key() << ": " << it.value();}
+
+        return variantMap;
+    }
+}
 
 
-// Clean up
-//reply->deleteLater();
+
+
+
+
+
+
+    // Clean up
+    //reply->deleteLater();
 
 

@@ -18,12 +18,12 @@ void DayInfo::setDate(const QDate &newDate)
     m_date = newDate;
 }
 
-QMap<QTime, WeatherInfo *> DayInfo::forecast() const
+QMap<QDateTime, WeatherInfo *> DayInfo::forecast() const
 {
     return m_forecast;
 }
 
-void DayInfo::setForecast(const QMap<QTime, WeatherInfo *> &newForecast)
+void DayInfo::setForecast(const QMap<QDateTime, WeatherInfo *> &newForecast)
 {
     m_forecast = newForecast;
 }

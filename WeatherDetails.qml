@@ -1,3 +1,4 @@
+//WeatherDetails.qml
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Window
@@ -7,11 +8,16 @@ import QtQuick.Layouts
 
 
 Item{
-
+    //********************************************************************************
+    //Variabler for currentWeather aka myWeather
     property string baseIconLink: "https://openweathermap.org/img/wn/01d@2x.png"
     property string fullCurrentIconLink: "https://openweathermap.org/img/wn/" + root.iconLinkCurrent + "@2x.png"
     property double currentTempDet: root.currentTemperature.toFixed(2)
     property string currentWeathDescDet: root.currentDesc
+
+    //********************************************************************************
+    //Variabler for forecast aka mymodel
+
 
 
     function updateWeatherStatus()
@@ -99,6 +105,8 @@ Item{
                 color: root.textColor
                 font.pixelSize: 16
             }
+
+
 
         }
 

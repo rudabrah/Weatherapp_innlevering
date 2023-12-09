@@ -18,8 +18,8 @@ public:
     QDate date() const;
     void setDate(const QDate &newDate);
 
-    QMap<QTime, WeatherInfo *> forecast() const;
-    void setForecast(const QMap<QTime, WeatherInfo *> &newForecast);
+    QMap<QDateTime, WeatherInfo *> forecast() const;
+    void setForecast(const QMap<QDateTime, WeatherInfo *> &newForecast);
 
 signals:
 
@@ -28,8 +28,8 @@ private:
     QDate m_date; //Dette er for å hente en dag
 
 
-    //Klokkeslett, weather_obj_adresse
-    QMap<QTime, WeatherInfo*> m_forecast;
+    //Dato, Klokkeslett, weather_obj_adresse
+    QMap<QDateTime, WeatherInfo*> m_forecast;
 
     /*
      * m_forecast{ "09:00": f09304803834}

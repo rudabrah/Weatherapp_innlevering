@@ -27,8 +27,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("myWeatherInfo", &myWeatherInfo);
     engine.rootContext()->setContextProperty("myWeather", &myWeather);
 
-    //myWeather.getCurrentWeather("Oslo", "");
-    //myModel.requestWeatherData("Oslo", "");
+
 
 
 

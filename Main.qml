@@ -32,18 +32,21 @@ Window {
     //Variabler for å holde brukerinput
     property string userCityInput: ""
     property string userApiKey: ""
-
+    //********************************************************************************
+    //Variabler for currentWeather aka myWeather
     //Må bruke double da float ikke finnes.
     property double currentTemperature: 0.0
     property string currentTemperatureString: currentTemperature.toString()
     property string iconLinkCurrent: ""
     property string currentDesc:""
+    //********************************************************************************
+    //Variabler for forecast - aka myModel
 
 
 
 
 
-
+    //Using this to only trigger the qml-updates AFTER the C++ is done
     Connections {
         target: myWeather
         onDataReady: {
@@ -57,6 +60,14 @@ Window {
 
             console.log(currentTemperature, "er nå tempvariablen", iconLinkCurrent);
             weatherDetailCurrent.updateWeatherStatus();
+
+        }
+    }
+    //Using this to only trigger the qml-updates AFTER the C++ is done
+    Connections{
+        target: myModel
+        onModelReady: {
+            console.log("Connected to modelController")
 
         }
     }
