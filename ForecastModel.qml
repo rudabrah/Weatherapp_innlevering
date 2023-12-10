@@ -8,7 +8,7 @@ import QtQuick.Layouts
 
 Item {
     id: forecastModel
-
+    //String for å holde forecasten
     property string holder: "Forecast here"
 
 
@@ -24,11 +24,20 @@ Item {
 
         ColumnLayout {
             id: columnLayout1
+
             anchors.fill: parent
+            Label{
+                width: parent.width
+                text: "Date          Time               Description             Temperature"
+                font.bold: true
+
+            }
+
             Text{
                 text: holder
                 color: root.textColor
                 wrapMode: Text.WordWrap
+                font.pixelSize: 12
 
             }
 

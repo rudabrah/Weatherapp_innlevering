@@ -47,7 +47,8 @@ Window {
 
 
 
-    //Using this to only trigger the qml-updates AFTER the C++ is done
+    //Bruker connections for å hindre qml i å prøve å henter variablene fra c++ før de er klare
+    //Denne for å hente current weather
     Connections {
         target: myWeather
         onDataReady: {
@@ -64,7 +65,7 @@ Window {
 
         }
     }
-    //Using this to only trigger the qml-updates AFTER the C++ is done
+    //Denne for å hente forecast
     Connections {
         target: myModel
         onForecastDataStringReady: {
@@ -74,9 +75,7 @@ Window {
         }
     }
 
-
-
-
+//NB - Console.log statements er lagt inn for å sikre at visse funksjoner er gjennomfør i c++
 
 
     //Rectangle to house all the goodgood
@@ -101,9 +100,8 @@ Window {
                 width: root.width
                 radius: 10
 
+                //Gjorde dette til en egen custom qml så jeg kan holde styr på den enklere
                 WeatherSearch{
-
-
                 }
 
                 Switch {
@@ -119,7 +117,6 @@ Window {
                         anchors.horizontalCenter: dark_Mode_Switch.horizontalCenter
                     }
                     checked: false
-
                 }
 
             }
@@ -140,7 +137,7 @@ Window {
                         width: rootRows1.width
                         height: rootRows1.height
                         radius: 10
-
+                        //Denne er tenkt å vise currentWeather
                         WeatherDetails{
                             id: weatherDetailCurrent
 
@@ -160,10 +157,9 @@ Window {
                         width: rootRows2.width
                         height: rootRows2.height
                         radius: 10
-
+                        //Denne er ment å vise forecast
                         ForecastModel{
                             id:theForecast
-
                         }
                     }
                 }
