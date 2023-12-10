@@ -41,6 +41,7 @@ Window {
     property string currentDesc:""
     //********************************************************************************
     //Variabler for forecast - aka myModel
+    property string forecastHolder: ""
 
 
 
@@ -66,8 +67,10 @@ Window {
     //Using this to only trigger the qml-updates AFTER the C++ is done
     Connections {
         target: myModel
-        onForecastDataReady: {
-            forecastModel.updateForecast(forecastData);
+        onForecastDataStringReady: {
+            console.log("forecast ready")
+            root.forecastHolder = myModel.forecastDataString
+            theForecast.getForecastToGui()
         }
     }
 
@@ -159,8 +162,7 @@ Window {
                         radius: 10
 
                         ForecastModel{
-                            id: forecastModel
-
+                            id:theForecast
 
                         }
                     }

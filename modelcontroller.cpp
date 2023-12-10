@@ -2,8 +2,6 @@
 
 #include "modelcontroller.h"
 
-
-
 double kelvTodegC = 272.15;
 
 ModelController::ModelController(QObject *parent) : QObject(parent)
@@ -26,6 +24,7 @@ void ModelController::requestWeatherData(const QString &cityName, const QString 
     networkManager->get(request);
 
 }
+
 
 
 
@@ -62,6 +61,8 @@ void ModelController::onReplyFinished(QNetworkReply *reply)
         emit requestError(reply->errorString());
     }
 }
+
+
 
 
 void ModelController::handleForcast(QString responsData)
@@ -131,15 +132,27 @@ void ModelController::handleForcast(QString responsData)
         }
     }
 
-    this->fullForecastData = convertToVariantMap(map_date_weather);
-    qDebug() << "emiting forecastDataReady with" << fullForecastData;
-    emit forecastDataReady(fullForecastData);
+    this->fullforecastData = convertToVariantMap(map_date_weather);
+    qDebug() << "emiting forecastDataReady with" << fullforecastData;
+    emit forecastDataReady(fullforecastData);
 
-    for (auto it = fullForecastData.constBegin(); it != fullForecastData.constEnd(); ++it) {
+    for (auto it = fullforecastData.constBegin(); it != fullforecastData.constEnd(); ++it) {
         qDebug() << "Key:" << it.key() << ", Value:" << it.value();
     }
+
+    fullforecastDataString = convertToVariantString(map_date_weather);
+    setforecastDataString(fullforecastDataString);
+    emit forecastDataStringReady();
+    qDebug() << fullforecastDataString;
+
+
+
 }
 
+QVariantMap ModelController::fullForecastData() const
+{
+    return fullforecastData;
+}
 
 //For å gjøre forcasten tilgjengelig for QML må QMap gjøres om til QVaraintMap
 //Kjører en memberfunction ettersom den kun skal brukes som en del av modelcontroller
@@ -162,17 +175,45 @@ QVariantMap ModelController::convertToVariantMap(QMap<QDateTime, WeatherInfo*> m
         variantMap.insert(key, value);
     }
 
+    fullforecastData = variantMap;
+    emit forecastDataReady(fullforecastData);
     return variantMap;
 }
 
+QString ModelController::convertToVariantString(QMap<QDateTime, WeatherInfo*> map) {
+    QStringList dataList;
 
+    for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
+        QString key = it.key().toString("yyyy-MM-dd hh:mm:ss");  // Format the date and time
+        QString value;
+        if (it.value() != nullptr) {
+            value = QString("Weather: %1, Temperature: %2")
+                        .arg(it.value()->description())
+                        .arg(it.value()->temp_cel());
+        } else {
+            value = "No data available";
+        }
 
+        // Combine key and value into a single string
+        dataList << key + ": " + value;
+    }
 
+    // Join all entries into a single long string, separated by new lines
+    return dataList.join("\n");
+}
 
+QString ModelController::forecastDataString() const
+{
+    qDebug() << m_forecastDataString << "Debugged!!";
+    return m_forecastDataString;
+}
 
+void ModelController::setforecastDataString(const QString newForecastDataString)
+{
+    m_forecastDataString = newForecastDataString;
+}
 
-
-    // Clean up
-    //reply->deleteLater();
-
-
+QString ModelController::getforecastDataString()
+{
+    return m_forecastDataString;
+}
