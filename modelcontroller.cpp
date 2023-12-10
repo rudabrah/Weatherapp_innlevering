@@ -119,16 +119,24 @@ void ModelController::handleForcast(QString responsData)
 
                 map_date_weather.insert(dateTime, new_weather);
 
-                convertToVariantMap(map_date_weather);
 
-                //This is to give the QML a heads up to start
-                emit modelReady();
 
                 /*for (auto it = map_date_weather.constBegin(); it != map_date_weather.constEnd(); ++it) {
                     qDebug() << "Key:" << it.key().toString("yyyy-MM-dd HH:mm:ss") << ", Value:" << it.value()->getDescription() << "&" << it.value()->getTemp() <<"°C" ;
                 }*/
             }
+
+
+
         }
+    }
+
+    this->fullForecastData = convertToVariantMap(map_date_weather);
+    qDebug() << "emiting forecastDataReady with" << fullForecastData;
+    emit forecastDataReady(fullForecastData);
+
+    for (auto it = fullForecastData.constBegin(); it != fullForecastData.constEnd(); ++it) {
+        qDebug() << "Key:" << it.key() << ", Value:" << it.value();
     }
 }
 
@@ -141,7 +149,6 @@ QVariantMap ModelController::convertToVariantMap(QMap<QDateTime, WeatherInfo*> m
     for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
         // Gjør om QDateTime til String så den blir lesbar
         QString key = it.key().toString();
-
         // Gjør om til string her og av samme grunn som over
         QString value;
         if (it.value() != nullptr) {
@@ -151,14 +158,11 @@ QVariantMap ModelController::convertToVariantMap(QMap<QDateTime, WeatherInfo*> m
         } else {
             value = "No data available";
         }
-
         // Putter det inn i variantmappen
         variantMap.insert(key, value);
-        for (auto it = variantMap.constBegin(); it != variantMap.constEnd(); ++it) {
-            qDebug() << it.key() << ": " << it.value();}
-
-        return variantMap;
     }
+
+    return variantMap;
 }
 
 

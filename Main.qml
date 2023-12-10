@@ -64,13 +64,14 @@ Window {
         }
     }
     //Using this to only trigger the qml-updates AFTER the C++ is done
-    Connections{
+    Connections {
         target: myModel
-        onModelReady: {
-            console.log("Connected to modelController")
-
+        onForecastDataReady: {
+            forecastModel.updateForecast(forecastData);
         }
     }
+
+
 
 
 
@@ -157,8 +158,9 @@ Window {
                         height: rootRows2.height
                         radius: 10
 
-                        WeatherDetails{
-                            id: weatherDetailForcast
+                        ForecastModel{
+                            id: forecastModel
+
 
                         }
                     }
