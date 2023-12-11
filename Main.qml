@@ -9,8 +9,8 @@ import QtQuick.Layouts
 Window {
 
     id: root
-    width: 850
-    height: 850
+    width: 700
+    height: 700
     visible: true
     title: qsTr("Freyr")//Nordic god of sunshine
     //********************************************************************************
@@ -157,6 +157,7 @@ Window {
                         width: rootRows2.width
                         height: rootRows2.height
                         radius: 10
+
                         //Denne er ment å vise forecast
                         ForecastModel{
                             id:theForecast

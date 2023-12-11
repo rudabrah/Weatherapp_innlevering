@@ -62,7 +62,7 @@ void currentWeather::handleReply(QNetworkReply *reply)
         response = reply->readAll();
         //Printer ut for å sjekke den
         //qInfo() << response;
-        //sender den dirrekte til handleForcars for videre behandling
+        //sender den direkte til handleForcars for videre behandling
         emit currentResponse(response);
     } else {
         // Handle error
@@ -93,7 +93,7 @@ void currentWeather::handleWeather(QString replyResponse)
 
     qInfo() << "From c++, Current temp is" << curTemp << "°C";
 
-    //Description
+    //Description - Here we get the values we want out of the JSON. This one is tailored to the "weather" api
     QJsonArray currentWeatherdescToArray = weatherJson["weather"].toArray();
     QJsonObject currentWeatherDescriptionObject = currentWeatherdescToArray[0].toObject();
     currentWeatherDescription = currentWeatherDescriptionObject["description"].toString();
@@ -108,7 +108,7 @@ void currentWeather::handleWeather(QString replyResponse)
     emit dataReady();
 
     //QMap<QString, float> temp_and_desc_map;
-
+    //debugging
     qInfo() << currentWeatherDescription << "*******************************";
 
 

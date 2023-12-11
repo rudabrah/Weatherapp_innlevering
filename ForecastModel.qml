@@ -20,16 +20,21 @@ Item {
 
 
     Rectangle{
-        anchors.fill: parent
+        anchors.centerIn: parent
+        width: parent.width - 20
+        height: parent.height - 20
+
 
         ColumnLayout {
             id: columnLayout1
+            width: parent.width - 15
 
             anchors.fill: parent
             Label{
                 width: parent.width
                 text: "Date          Time               Description             Temperature"
                 font.bold: true
+                color: root.textColor
 
             }
 

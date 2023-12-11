@@ -19,12 +19,12 @@ Item{
     //Variabler for forecast aka mymodel
 
 
-
+    //funtction to update variables on connectiontrigger in Main.qml
     function updateWeatherStatus()
     {
         weatherIcon.source = fullCurrentIconLink
         actualDescLbl.text = currentWeathDescDet
-        actualTempLbl.text = currentTempDet
+        actualTempLbl.text = currentTempDet + "°C"
     }
 
 
@@ -37,7 +37,7 @@ Item{
             myWeather.getCurrentWeather("Oslo", "xxx");
         }
     }*/
-
+    //just a housing
     Rectangle{
         id: gridRectangle
         width: parent.width / 2
@@ -46,69 +46,86 @@ Item{
         color: "#00000000"
         radius: 10
 
-        Grid{
+        ColumnLayout{
             id: grid1
-            height: parent.height / 3
+            height: parent.height
             width: parent.width
-            columns: 3
-            columnSpacing: 2
-            rows: 2
+            //columns: 2
+            //columnSpacing: 2
+            //rows: 2
 
-            Label {
-                id: descriptionLbl
-                padding: 10
-                text:"Description"
-                //width: parent /3
-                font.pixelSize: 16
-                color: root.textColor
+            Row{
+
+                Label {
+                    id: descriptionLbl
+                    padding: 10
+                    text:"Description"
+                    font.bold: true
+                    font.pixelSize: 16
+                    color: root.textColor
+                    height: 50
+
+                }
+
+                Label{
+                    id: actualDescLbl
+                    padding: 10
+
+                    text: ""
+                    color: root.textColor
+                    font.pixelSize: 16
+                    height: 50
+
+                }
+
+
+
+            }
+            Row{
+
+                Label{
+                    id: temperatureLbl
+                    padding: 10
+                    font.bold: true
+                    text:"Temperature"
+                    font.pixelSize: 16
+                    color: root.textColor
+                    height: 50
+
+                }
+
+                Label{
+                    id: actualTempLbl
+                    padding: 10
+                    //width: parent /3
+                    text: ""
+                    color: root.textColor
+                    font.pixelSize: 16
+                    height: 50
+
+                }
+
+            }
+            Row{
+                Image{
+                    id: weatherIcon
+
+                    source: baseIconLink
+                    height: 100
+                    width: 100
+
+                }
 
             }
 
 
 
-            Label{
-                id: temperatureLbl
-                padding: 10
-                //width: parent /3
-                text:"Temperature"
-                font.pixelSize: 16
-                color: root.textColor
-                
 
-
-            }
-
-
-            Image{
-                id: weatherIcon
-
-                source: baseIconLink
-                height: 100
-                width: 100
-
-            }
-
-            Label{
-                id: actualDescLbl
-                padding: 10
-                //width: parent /3
-                text: ""
-                color: root.textColor
-                font.pixelSize: 16
-            }
-
-            Label{
-                id: actualTempLbl
-                padding: 10
-                //width: parent /3
-                text: ""
-                color: root.textColor
-                font.pixelSize: 16
-            }
 
 
 
         }
+
 
 
     }

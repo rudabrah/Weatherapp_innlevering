@@ -180,14 +180,15 @@ QVariantMap ModelController::convertToVariantMap(QMap<QDateTime, WeatherInfo*> m
     return variantMap;
 }
 
+//Denne ble laget som en quick-and-dirty fiks for variantmap. Dette fordi variantmapen aldri ble synelig i QML..
 QString ModelController::convertToVariantString(QMap<QDateTime, WeatherInfo*> map) {
     QStringList dataList;
 
     for (auto it = map.constBegin(); it != map.constEnd(); ++it) {
-        QString key = it.key().toString("yyyy-MM-dd hh:mm:ss");  // Format the date and time
+        QString key = it.key().toString("dd-MM-yy hh:mm:ss");  // Format the date and time
         QString value;
         if (it.value() != nullptr) {
-            value = QString("Weather: %1, Temperature: %2")
+            value = QString(" %1, Temperature: %2 °C")
                         .arg(it.value()->description())
                         .arg(it.value()->temp_cel());
         } else {
@@ -202,12 +203,13 @@ QString ModelController::convertToVariantString(QMap<QDateTime, WeatherInfo*> ma
     return dataList.join("\n");
 }
 
+//Getter og setter for stringen så vi kan vise dataen i QML
 QString ModelController::forecastDataString() const
 {
     qDebug() << m_forecastDataString << "Debugged!!";
     return m_forecastDataString;
 }
-
+//NB - prøvde å kjøre en pointer til inputstringen, men da kræsja appen...
 void ModelController::setforecastDataString(const QString newForecastDataString)
 {
     m_forecastDataString = newForecastDataString;
